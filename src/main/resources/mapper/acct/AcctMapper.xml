@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper">
+
+    <select id="findAll" resultType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.acct.AcctDto">
+        SELECT ACCT_ID
+             , ACCT_PW
+             , NAME
+             , CONTACT
+             , BIRTH_DATE
+             , GENDER
+             , ACTIVE_YN
+             , REG_DTM
+             , REG_ID
+             , MOD_DTM
+             , MOD_ID
+          FROM ACCT
+    </select>
+
+</mapper>
