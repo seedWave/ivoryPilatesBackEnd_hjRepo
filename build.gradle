@@ -41,6 +41,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")   // JDBC 기본 지원
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+    // ✅ AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
 	// ✅ Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -48,6 +51,8 @@ dependencies {
 	// ✅ Devtools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    // ✅ Reflection
+    implementation 'org.reflections:reflections:0.9.12'
 
 	// ✅ TEST
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
