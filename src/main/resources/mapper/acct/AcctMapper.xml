@@ -5,7 +5,7 @@
 
 <mapper namespace="com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper">
 
-    <select id="findAll" resultType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.acct.AcctDto">
+    <select id="getAllAccts" resultType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.acct.AcctDto">
         SELECT ACCT_ID
              , ACCT_PW
              , NAME
@@ -18,6 +18,24 @@
              , MOD_DTM
              , MOD_ID
           FROM ACCT
+         ORDER BY ACCT_ID
+    </select>
+
+    <select id="getAcctById" resultType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.acct.AcctDto">
+        SELECT ACCT_ID
+             , ACCT_PW
+             , NAME
+             , CONTACT
+             , BIRTH_DATE
+             , GENDER
+             , ACTIVE_YN
+             , REG_DTM
+             , REG_ID
+             , MOD_DTM
+             , MOD_ID
+          FROM ACCT
+         WHERE ACCT_ID = #{acct_id}
+         ORDER BY ACCT_ID
     </select>
 
 </mapper>
