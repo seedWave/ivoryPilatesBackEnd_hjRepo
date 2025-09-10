@@ -1,5 +1,7 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonMethod;
 
+import static com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
@@ -12,9 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
-import static com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg.NOT_FOUND;
-import static com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg.ON_SUCCESS;
 
 /**
  * @author nks
@@ -69,6 +68,7 @@ public class CommonMethod {
             return ResponseEntity.ok(ApiResponse.ok(payload));
         }
         else if (status.equals(NOT_FOUND)) return ResponseEntity.status(404).body(ApiResponse.error(NOT_FOUND));
+		else if (status.equals(CAN_NOT_FIND_USER)) return ResponseEntity.status(404).body(ApiResponse.error(CAN_NOT_FIND_USER));
         else return ResponseEntity.badRequest().body(ApiResponse.error(ResponseMsg.BAD_REQUEST));
     }
 
