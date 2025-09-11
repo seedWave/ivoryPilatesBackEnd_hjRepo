@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.Gender;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.YN;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.Acct;
 import com.dogfeetbirdfeet.ivorypilatesbackend.service.acct.AcctService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,8 +59,8 @@ public class AcctControllerSelectTest {
 		acctDto.setName("관리자01");
 		acctDto.setContact("010-2592-3017");
 		acctDto.setBirthDate("2025년 05월 27일");
-		acctDto.setGender("W");
-		acctDto.setActiveYn("Y");
+		acctDto.setGender(Gender.F);
+		acctDto.setActiveYn(YN.Y);
 		acctDto.setRegDtm("2025년 09월 07일");
 		acctDto.setRegId("SYS");
 		acctDto.setModDtm("2025년 09월 07일");
