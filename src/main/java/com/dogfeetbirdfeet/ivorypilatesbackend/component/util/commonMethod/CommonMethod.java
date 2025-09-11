@@ -33,7 +33,6 @@ public class CommonMethod {
 
 	/**
 	 * YYYYmmDD 형태로 되어 있는 DB 데이트를 YYYY년 MM월 DD일 형태로 변환한다.
-	 * 명명규칙 : [형용사] [동물이름] [3자리숫자]
 	 */
 	public String translateDate(String date)
 	{

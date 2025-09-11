@@ -23,8 +23,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     /**
      * Spring Security Filter Chain 정의
-     * - JWT 인증 기반이므로 Stateless 세션 유지
-     * - /auth, /user, /api 등은 인증 없이 접근 가능
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

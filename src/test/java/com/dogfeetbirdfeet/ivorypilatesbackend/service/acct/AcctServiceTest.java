@@ -9,6 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.docs.SnippetWriter;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.Gender;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.YN;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.Acct;
 import com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper;
 
@@ -39,8 +41,8 @@ public class AcctServiceTest {
 		acctDto.setName("관리자01");
 		acctDto.setContact("010-2592-3017");
 		acctDto.setBirthDate("20250527");
-		acctDto.setGender("W");
-		acctDto.setActiveYn("Y");
+		acctDto.setGender(Gender.F);
+		acctDto.setActiveYn(YN.Y);
 		acctDto.setRegDtm("20250907");
 		acctDto.setRegId("SYS");
 		acctDto.setModDtm("20250907");
@@ -62,8 +64,8 @@ public class AcctServiceTest {
 		assertEquals("관리자01", result.getName());
 		assertEquals("010-2592-3017", result.getContact());
 		assertEquals("2025년 05월 27일", result.getBirthDate()); // 변환 확인
-		assertEquals("W", result.getGender());
-		assertEquals("Y", result.getActiveYn());
+		assertEquals(Gender.F, result.getGender());
+		assertEquals(YN.Y, result.getActiveYn());
 		assertEquals("2025년 09월 07일", result.getRegDtm());    // 변환 확인
 		assertEquals("SYS", result.getRegId());
 		assertEquals("2025년 09월 07일", result.getModDtm());    // 변환 확인
