@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum Gender {
 
 	M("M", "남성"),
-	F("F", "여성");
+	W("W", "여성");
 
 	private final String key;
 	private final String value;

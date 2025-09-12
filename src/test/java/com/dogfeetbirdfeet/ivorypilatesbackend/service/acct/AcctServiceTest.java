@@ -41,7 +41,7 @@ public class AcctServiceTest {
 		acctDto.setName("관리자01");
 		acctDto.setContact("010-2592-3017");
 		acctDto.setBirthDate("20250527");
-		acctDto.setGender(Gender.F);
+		acctDto.setGender(Gender.W);
 		acctDto.setActiveYn(YN.Y);
 		acctDto.setRegDtm("20250907");
 		acctDto.setRegId("SYS");
@@ -64,7 +64,7 @@ public class AcctServiceTest {
 		assertEquals("관리자01", result.getName());
 		assertEquals("010-2592-3017", result.getContact());
 		assertEquals("2025년 05월 27일", result.getBirthDate()); // 변환 확인
-		assertEquals(Gender.F, result.getGender());
+		assertEquals(Gender.W, result.getGender());
 		assertEquals(YN.Y, result.getActiveYn());
 		assertEquals("2025년 09월 07일", result.getRegDtm());    // 변환 확인
 		assertEquals("SYS", result.getRegId());

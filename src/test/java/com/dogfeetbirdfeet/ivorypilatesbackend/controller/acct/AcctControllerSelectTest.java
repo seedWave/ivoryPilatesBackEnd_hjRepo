@@ -59,7 +59,7 @@ public class AcctControllerSelectTest {
 		acctDto.setName("관리자01");
 		acctDto.setContact("010-2592-3017");
 		acctDto.setBirthDate("2025년 05월 27일");
-		acctDto.setGender(Gender.F);
+		acctDto.setGender(Gender.W);
 		acctDto.setActiveYn(YN.Y);
 		acctDto.setRegDtm("2025년 09월 07일");
 		acctDto.setRegId("SYS");
