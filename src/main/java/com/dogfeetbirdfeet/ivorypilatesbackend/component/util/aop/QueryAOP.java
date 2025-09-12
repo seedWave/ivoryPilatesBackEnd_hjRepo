@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.mapping.BoundSql;
@@ -121,32 +120,57 @@ public class QueryAOP {
 	 */
 	private Object buildParameterObject(Method method, Object[] args) {
 		if (args == null || args.length == 0) return null;
+
+		Annotation[][] anns = method.getParameterAnnotations();
+
 		if (args.length == 1) {
 			Object single = args[0];
-			// 단일 단순 타입일 때도 반복 사용/중복 바인딩 대응 위해 value/param1 키 제공
+
+			// 1) 단일 파라미터에 @Param 붙어있으면 그 이름으로 래핑
+			String paramName = null;
+			if (anns.length > 0) {
+				for (Annotation a : anns[0]) {
+					if (a instanceof Param) {
+						paramName = ((Param) a).value();
+						break;
+					}
+				}
+			}
+			if (paramName != null) {
+				Map<String, Object> m = new LinkedHashMap<>();
+				m.put(paramName, single);  // 예: "holi" -> DTO
+				m.put("param1", single);
+				m.put("value", single);
+				m.put("_parameter", single);
+				return m;
+			}
+
+			// 2) @Param 없고 단순 타입이면 value/param1로 별칭 제공
 			if (isSimpleType(single)) {
 				Map<String, Object> m = new LinkedHashMap<>();
 				m.put("value", single);
 				m.put("param1", single);
+				m.put("_parameter", single);
 				return m;
 			}
+
+			// 3) 그 외(POJO 한 개)는 그대로 전달 (#{field} 형태로 사용할 수 있음)
 			return single;
 		}
 
+		// 다중 파라미터: param1..N + @Param 이름 모두 제공
 		Map<String, Object> paramMap = new LinkedHashMap<>();
-		// param1..N
 		for (int i = 0; i < args.length; i++) paramMap.put("param" + (i + 1), args[i]);
-		// @Param 이름 부여
-		Annotation[][] anns = method.getParameterAnnotations();
 		for (int i = 0; i < anns.length; i++) {
 			for (Annotation a : anns[i]) {
-				if (a instanceof Param) {
-					paramMap.put(((Param) a).value(), args[i]);
-				}
+				if (a instanceof Param) paramMap.put(((Param) a).value(), args[i]);
 			}
 		}
+		// MyBatis 관례 키
+		paramMap.put("_parameter", paramMap);
 		return paramMap;
 	}
+
 
 	/**
 	 * BoundSql의 '?'를 실제 리터럴로 치환 (XML의 개행/들여쓰기 유지)
@@ -156,88 +180,85 @@ public class QueryAOP {
 	 */
 	private String renderSqlWithParams(Configuration cfg, BoundSql boundSql) {
 
-		String sql = boundSql.getSql(); // ★ 공백 압축 금지 → XML 포맷 그대로
+		String sql = boundSql.getSql();
 		List<ParameterMapping> mappings = boundSql.getParameterMappings();
-
 		if (mappings == null || mappings.isEmpty()) return sql;
 
 		TypeHandlerRegistry registry = cfg.getTypeHandlerRegistry();
 
-		// MetaObject 준비
 		Object paramObj = boundSql.getParameterObject();
-
 		MetaObject metaObject;
-		Map<String, Object> mapIfAny = null;
 
 		if (paramObj == null) {
 			metaObject = null;
 		} else if (paramObj instanceof Map<?, ?>) {
-			mapIfAny = copyToStringObjectMap((Map<?, ?>) paramObj);   // ★ 여기로 교체
-			metaObject = cfg.newMetaObject(mapIfAny);
+			// ParamMap 그대로 사용 (복사/타입 변환 X)
+			metaObject = cfg.newMetaObject(paramObj);
 		} else if (registry.hasTypeHandler(paramObj.getClass())) {
-			mapIfAny = new LinkedHashMap<>();
-			mapIfAny.put("value", paramObj);
-			mapIfAny.put("param1", paramObj);
-			metaObject = cfg.newMetaObject(mapIfAny);
+			// 단일-단순 파라미터일 때만 별칭 제공
+			Map<String, Object> alias = new LinkedHashMap<>();
+			alias.put("value", paramObj);
+			alias.put("param1", paramObj);
+			metaObject = cfg.newMetaObject(alias);
 		} else {
 			metaObject = cfg.newMetaObject(paramObj);
 		}
 
-		// 치환 수행
-		List<String> usedLiterals = new ArrayList<>();
-
 		for (ParameterMapping pm : mappings) {
 			String prop = pm.getProperty();
+			Object value = null;
 
-			Object value;
-
+			// 1) 추가 파라미터 먼저
 			if (boundSql.hasAdditionalParameter(prop)) {
 				value = boundSql.getAdditionalParameter(prop);
-			} else if (metaObject != null && metaObject.hasGetter(prop)) {
-				value = metaObject.getValue(prop);
-			} else if (prop != null && prop.contains(".")) {
-				// foreach에서 생성되는 __frch_*.* 형태 지원
-				String base = prop.substring(0, prop.indexOf('.'));
-				if (boundSql.hasAdditionalParameter(base)) {
-					Object additional = boundSql.getAdditionalParameter(base);
-					value = cfg.newMetaObject(additional).getValue(prop.substring(base.length() + 1));
-				} else {
-					value = null;
-				}
-				// MetaObject 생성 직후, 단일-단순 파라미터면 모든 매핑키에 alias 주입
-			} else if (mapIfAny != null && mapIfAny.containsKey("value")) {
-				// 단일 단순 파라미터: XML의 어떤 프로퍼티명이라도 동일 값으로 간주
-				Object singleVal = mapIfAny.get("value");
-				for (ParameterMapping pmg : mappings) {
-					String p = pmg.getProperty();
-					mapIfAny.putIfAbsent(p, singleVal);
-				}
-
-				value = mapIfAny.get("value");
 			}
-			else {
-				value = null;
+
+			// 2) 메인 파라미터에서 직통 조회 시도 (점/인덱스 포함)
+			if (value == null && metaObject != null) {
+				try {
+					value = metaObject.getValue(prop); // hasGetter 검사 없이 바로 시도
+				} catch (Exception ignore) {
+					// 계속 진행
+				}
+			}
+
+			// 3) base 토큰이 additionalParameter에 있을 때 (foreach, list[0].field 등)
+			if (value == null && prop != null) {
+				int split = indexOfFirstDotOrBracket(prop); // 최초의 '.' 또는 '[' 위치
+				if (split > 0) {
+					String base = prop.substring(0, split);
+					String child = prop.substring(split + 1);
+					if (boundSql.hasAdditionalParameter(base)) {
+						Object addl = boundSql.getAdditionalParameter(base);
+						try {
+							value = cfg.newMetaObject(addl).getValue(child);
+						} catch (Exception ignore) {
+							// keep null
+						}
+					}
+				}
 			}
 
 			String lit = toSqlLiteral(value);
-			usedLiterals.add(lit);
-			sql = sql.replaceFirst("\\?", Matcher.quoteReplacement(lit));
-
+			sql = sql.replaceFirst("\\?", java.util.regex.Matcher.quoteReplacement(lit));
 		}
 
-		// 혹시 남았으면(매핑 누락/중복) 보수적으로 보정:
-		// - 모든 리터럴이 동일하고 1종류 뿐이면 남은 '?' 전부 동일 리터럴로 대체
-		if (sql.contains("?")) {
-			Set<String> uniq = new HashSet<>(usedLiterals);
-			if (uniq.size() == 1) {
-				String only = usedLiterals.isEmpty() ? "NULL" : usedLiterals.getFirst();
-				while (sql.contains("?")) {
-					sql = sql.replaceFirst("\\?", Matcher.quoteReplacement(only));
-				}
-			}
-		}
 		return sql;
 	}
+
+	/**
+	 * Table.Column 형태 대응 위한 처리
+	 * @param s 대상 문자열
+	 * @return . 혹은 [ 이 존재하는 가장 첫 번째 위치
+	 */
+	private int indexOfFirstDotOrBracket(String s) {
+		int d = s.indexOf('.');
+		int b = s.indexOf('[');
+		if (d == -1) return b;
+		if (b == -1) return d;
+		return Math.min(d, b);
+	}
+
 
 	/**
 	 * 타입 확인
@@ -312,20 +333,6 @@ public class QueryAOP {
 	 */
 	private String nullSafe(String s) {
 		return null == s ? "" : s;
-	}
-
-	/**
-	 * parameter key 문자열로 셋팅
-	 * @param src 대상 map
-	 * @return 타입 변환 Map
-	 */
-	private Map<String, Object> copyToStringObjectMap(Map<?, ?> src) {
-		Map<String, Object> out = new LinkedHashMap<>();
-		for (Map.Entry<?, ?> e : src.entrySet()) {
-			String key = String.valueOf(e.getKey()); // 키를 문자열로 강제
-			out.put(key, e.getValue());
-		}
-		return out;
 	}
 
 }
