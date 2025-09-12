@@ -44,6 +44,9 @@ dependencies {
     // ✅ AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+    // ✅ JSON
+    implementation 'org.json:json:20240303'
+
 	// ✅ Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
