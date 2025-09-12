@@ -10,6 +10,7 @@ import lombok.Data;
 public class HolidayMst {
 
 	private String holiId;
+	private String holiNm;
 	private String schedDate;
 	private String regDtm;
 	private String regId;

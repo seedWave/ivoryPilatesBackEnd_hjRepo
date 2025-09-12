@@ -82,6 +82,7 @@ public class CommonMethod {
     {
         if (result == 1) return ON_SUCCESS;
         else if (result == 0) return NOT_FOUND;
+		else if (result > 1) return MULTI_AFFECTED;
         else return ResponseMsg.BAD_REQUEST;
     }
 }
