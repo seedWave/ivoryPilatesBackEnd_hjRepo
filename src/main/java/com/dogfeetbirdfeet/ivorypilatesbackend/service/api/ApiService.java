@@ -144,11 +144,20 @@ public class ApiService {
 		int totalCount = jsonObject.getInt("totalCount");
 		API_LOG.info("totalCount [{}]" , totalCount);
 
+		List<HolidayMst> list = new ArrayList<>();
+		JSONArray jsonArray = new JSONArray();
+
 		if (totalCount <= 0) return;
 
-		JSONArray jsonArray = jsonObject.getJSONObject("items").getJSONArray("item");
-
-		List<HolidayMst> list = new ArrayList<>();
+		else if (totalCount == 1)
+		{
+			JSONObject target = jsonObject.getJSONObject("items").getJSONObject("item");
+			jsonArray.put(target);
+		}
+		else
+		{
+			jsonArray = jsonObject.getJSONObject("items").getJSONArray("item");
+		}
 
 		for (int i = 0; i < jsonArray.length(); i++	)
 		{
@@ -181,6 +190,7 @@ public class ApiService {
 
 		else API_LOG.info("insertHolidayMst success");
 	}
+
 
 }
 
