@@ -9,9 +9,7 @@
         INSERT
           INTO HOLIDAY_MST
           (
-            HOLI_ID
           , HOLI_NM
-          , SCHED_DATE
           , REG_DTM
           , REG_ID
           , MOD_DTM
@@ -19,9 +17,7 @@
           )
         VALUES
           (
-            #{holi.holiId}
           , #{holi.holiNm}
-          , #{holi.schedDate}
           , DATE_FORMAT(NOW(), '%Y%m%d')
           , 'SYS'
           , DATE_FORMAT(NOW(), '%Y%m%d')

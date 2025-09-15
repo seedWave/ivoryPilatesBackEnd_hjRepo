@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class CusGrp {
 
-	private String grpCusId;
+	private Long grpCusId;
 	private String cusId1;
 	private String cusId2;
 	private String cusId3;

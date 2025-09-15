@@ -14,8 +14,8 @@ public class CusWdr {
 	private String custId;
 	private String mstId;
 	private String acctId;
-	private String grpCusId;
-	private String clsPassId;
+	private Long grpCusId;
+	private Long clsPassId;
 	private Integer height;
 	private Integer weight;
 	private String disease;

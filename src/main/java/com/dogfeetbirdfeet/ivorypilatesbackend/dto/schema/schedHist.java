@@ -11,12 +11,10 @@ import lombok.Data;
 @Data
 public class schedHist {
 
-	private String schedHistId;
-	private String schedId;
+	private Long schedHistId;
+	private Long schedId;
 	private String acctId;
 	private String mstId;
-	private String schedDate;
-	private String schedTime;
 	private YN clsDoneYn;
 	private String modCnt;
 	private String regDtm;

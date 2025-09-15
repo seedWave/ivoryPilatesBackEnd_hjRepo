@@ -12,13 +12,11 @@ import lombok.Data;
 @Data
 public class SchedMst {
 
-	private String schedId;
-	private String acctId;
+	private Long schedId;
+	private Long acctId;
 	private String mstId;
 	private String trainerNm;
 	private String cusNm;
-	private String schedDate;
-	private String schedTime;
 	private ClsStatus clsStatus;
 	private String clsSession;
 	private String injury;
