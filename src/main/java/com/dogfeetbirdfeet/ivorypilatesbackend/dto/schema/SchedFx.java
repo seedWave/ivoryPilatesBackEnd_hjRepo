@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class SchedFx {
 
-	private String fxSchedId;
+	private Long fxSchedId;
 	private String MstId;
 	private String acctId;
 	private Day fxDay;

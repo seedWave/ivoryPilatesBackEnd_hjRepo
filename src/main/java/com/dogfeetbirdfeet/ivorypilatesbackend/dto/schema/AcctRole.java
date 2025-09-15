@@ -10,7 +10,7 @@ import lombok.Data;
 public class AcctRole {
 
 	private String acctId;
-	private String roleId;
+	private Long roleId;
 	private String regDtm;
 	private String regId;
 	private String modDtm;

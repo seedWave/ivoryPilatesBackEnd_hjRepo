@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class ClsPkg {
 
-	private String clsPkgId;
+	private Long clsPkgId;
 	private String clsPkgNm;
 	private Integer clsPkgCnt;
 	private Integer price;

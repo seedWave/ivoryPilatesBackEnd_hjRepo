@@ -12,8 +12,8 @@ import lombok.Data;
 @Data
 public class ClsPass {
 
-	private String clsPassId;
-	private String clsPkgId;
+	private Long clsPassId;
+	private Long clsPkgId;
 	private String mstId;
 	private String grpCusId;
 	private Integer discountAmt;

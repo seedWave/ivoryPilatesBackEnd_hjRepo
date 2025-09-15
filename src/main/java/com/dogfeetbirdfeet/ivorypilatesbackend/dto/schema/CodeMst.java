@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class CodeMst {
 
-	private String codeMstId;
+	private Long codeMstId;
 	private String classCd;
 	private String classNm;
 	private String comment;

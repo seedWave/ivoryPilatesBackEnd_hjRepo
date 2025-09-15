@@ -12,8 +12,8 @@ import lombok.Data;
 @Data
 public class ClsPayInfo {
 
-	private String payId;
-	private String clsPkgId;
+	private Long payId;
+	private Long clsPkgId;
 	private PaidFlag paidFlag;
 	private Integer paidAmt;
 	private PayMethod payMethod;

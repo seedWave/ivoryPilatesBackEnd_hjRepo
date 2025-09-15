@@ -172,9 +172,8 @@ public class ApiService {
 			if (!isHoliday.equals("Y")) continue;
 
 			HolidayMst holidayMst = new HolidayMst();
-			holidayMst.setHoliId(locDate + "_" + dateName);
 			holidayMst.setHoliNm(dateName);
-			holidayMst.setSchedDate(locDate + "");
+//			holidayMst.setSchedDate(locDate + "");
 
 			list.add(holidayMst);
 			API_LOG.info("dateName [{}], locDate [{}], dateKind [{}], isHoliday [{}], seq [{}]" , dateName, locDate, dateKind, isHoliday, seq);
