@@ -15,5 +15,9 @@ public class CalMst {
     private String day;
     private String schedDate;
     private String schedTime;
+	private String regDtm;
+	private String regId;
+	private String modDtm;
+	private String modId;
 
 }

@@ -9,7 +9,7 @@ import lombok.Data;
  * @apiNote cusReg schema
  */
 @Data
-public class cusReg {
+public class CusReg {
 
 	private String custId;
 	private String mstId;

@@ -14,7 +14,7 @@ public class Career {
 	private String careerNm;
 	private String careerOrg;
 	private String careerMemo;
-	private String careerStrtDt;
+	private String careerStrDt;
 	private String careerEndDt;
 	private String regDtm;
 	private String regId;

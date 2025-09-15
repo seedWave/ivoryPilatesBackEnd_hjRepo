@@ -11,8 +11,8 @@ import lombok.Data;
 @Data
 public class CodeDtl {
 
-	private Long codeMstId;
 	private Long codeId;
+	private Long codeMstId;
 	private String classCd;
 	private String dtlCd;
 	private String dtlNm;
