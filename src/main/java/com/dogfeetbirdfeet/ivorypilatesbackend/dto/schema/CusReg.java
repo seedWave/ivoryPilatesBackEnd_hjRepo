@@ -16,8 +16,8 @@ public class CusReg {
 	private String acctId;
 	private Long grpCusId;
 	private Long clsPassId;
-	private Integer height;
-	private Integer weight;
+	private Float height;
+	private Float weight;
 	private String disease;
 	private String surHist;
 	private String bodyCheckImg;
