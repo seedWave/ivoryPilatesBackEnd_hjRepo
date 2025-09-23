@@ -8,9 +8,14 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonMethod.CommonMethod;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.dataDTO.HolidayMstWithSchedDate;
+import com.dogfeetbirdfeet.ivorypilatesbackend.mapper.calMst.CalMstMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -21,8 +26,8 @@ import org.json.XML;
 
 import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.maker.ServiceResult;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg;
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.HolidayMst;
 import com.dogfeetbirdfeet.ivorypilatesbackend.service.holidayMst.HolidayMstService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author nks
@@ -31,16 +36,58 @@ import com.dogfeetbirdfeet.ivorypilatesbackend.service.holidayMst.HolidayMstServ
 @Service
 public class ApiService {
 
-	@Value("${api.data-go-kr.key}")
+    private final CommonMethod commonMethod;
+    @Value("${api.data-go-kr.key}")
 	private String apiKey;
 
 	private final HolidayMstService holidayMstService;
-	private static final Logger API_LOG = LoggerFactory.getLogger("API_LOG");
+    private static final Logger API_LOG = LoggerFactory.getLogger("API_LOG");
+    private final CalMstMapper calMstMapper;
 
-	public ApiService(HolidayMstService holidayMstService) {
+	public ApiService(HolidayMstService holidayMstService, CalMstMapper calMstMapper, CommonMethod commonMethod) {
 		this.holidayMstService = holidayMstService;
-	}
+        this.calMstMapper = calMstMapper;
+        this.commonMethod = commonMethod;
+    }
 
+    /**
+     * 캘린더를 만든다.
+     * 대상 테이블은 CAL_MST
+     * 모든 캘린더성 테이블은 CAL_MST - CAL_REL 을 기반으로 작동한다.
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void makeCalender(String staYmd) {
+
+        // 20000101 ~ 99991231까지 25년 단위로 반복한다.
+
+        DateTimeFormatter B = DateTimeFormatter.BASIC_ISO_DATE; // yyyyMMdd
+
+        LocalDate start = LocalDate.parse(staYmd, B);            // 20000101
+        LocalDate limit = LocalDate.of(2999, 12, 31);            // 루프 상한 (필요에 맞게)
+
+        ResponseMsg fsMsg;
+
+        while (!start.isAfter(limit))
+        {
+            LocalDate end = start.plusYears(25).minusDays(1);    // 25년 블록: 시작~(시작+25년-1일)
+            if (end.isAfter(limit)) end = limit;
+
+            String s = start.format(B);  // yyyyMMdd
+            String e = end.format(B);    // yyyyMMdd
+
+            fsMsg = commonMethod.returnResultByResponseMsg(
+                calMstMapper.makeCalmst(s, e)
+            );
+
+            if (!fsMsg.equals(ResponseMsg.ON_SUCCESS) && !fsMsg.equals(ResponseMsg.MULTI_AFFECTED)) {
+                API_LOG.error("makeCalmst failed: {} ~ {}, msg={}", s, e, fsMsg);
+                return;
+            }
+
+            start = start.plusYears(25); // 다음 25년 블록으로
+        }
+
+    }
 	/**
 	 * 공공 데이터 포털 API 를 통해 특정 년, 특정 월의 공휴일 정보를 받아온다. 
 	 * 요청 할 URL을 구성한다.
@@ -48,6 +95,7 @@ public class ApiService {
 	 * @param solYear 대상 년도
 	 * @param solMonth 대상 월
 	 */
+    @Transactional(rollbackFor = Exception.class)
 	public void getHolidayExplorer(String solYear, String solMonth) {
 
 		/*URL*/
@@ -83,7 +131,8 @@ public class ApiService {
 	 * @param requestURL 대상 경로 (공공데이터 포털)
 	 * @throws IOException 입출력 오류
 	 */
-	private void getResultFromConnection(URL requestURL) throws IOException {
+    @Transactional(rollbackFor = Exception.class)
+	public void getResultFromConnection(URL requestURL) throws IOException {
 
 		HttpURLConnection conn = (HttpURLConnection) requestURL.openConnection();
 		BufferedReader rd = null;
@@ -138,13 +187,14 @@ public class ApiService {
 	 *
 	 * @param jsonObject 공공데이터 포탈에서 받아온 결과값
 	 */
-	private void tableInsert(JSONObject jsonObject)
+    @Transactional(rollbackFor = Exception.class)
+	public void tableInsert(JSONObject jsonObject)
 	{
 
 		int totalCount = jsonObject.getInt("totalCount");
 		API_LOG.info("totalCount [{}]" , totalCount);
 
-		List<HolidayMst> list = new ArrayList<>();
+		List<HolidayMstWithSchedDate> list = new ArrayList<>();
 		JSONArray jsonArray = new JSONArray();
 
 		if (totalCount <= 0) return;
@@ -171,16 +221,16 @@ public class ApiService {
 
 			if (!isHoliday.equals("Y")) continue;
 
-			HolidayMst holidayMst = new HolidayMst();
+            HolidayMstWithSchedDate holidayMst = new HolidayMstWithSchedDate();
 			holidayMst.setHoliNm(dateName);
-//			holidayMst.setSchedDate(locDate + "");
+			holidayMst.setSchedDate(String.valueOf(locDate));
 
 			list.add(holidayMst);
 			API_LOG.info("dateName [{}], locDate [{}], dateKind [{}], isHoliday [{}], seq [{}]" , dateName, locDate, dateKind, isHoliday, seq);
 		}
 
 		// 트랜잭션 처리를 위해 List 형태로 보낸다. 해당 월의 모든 공휴일은 원자성을 지켜야 한다.
-		ServiceResult<HolidayMst> result = holidayMstService.insertHolidayMst(list);
+		ServiceResult<HolidayMstWithSchedDate> result = holidayMstService.insertHolidayMst(list);
 
 		if (! result.status().equals(ResponseMsg.ON_SUCCESS))
 		{
