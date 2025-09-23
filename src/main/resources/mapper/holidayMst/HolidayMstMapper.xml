@@ -5,11 +5,15 @@
 
 <mapper namespace="com.dogfeetbirdfeet.ivorypilatesbackend.mapper.holidayMst.HolidayMstMapper">
 
-    <insert id="insertHoliday">
+    <insert id="insertHoliday"
+            parameterType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.dataDTO.HolidayMstWithSchedDate"
+            useGeneratedKeys="true"
+            keyProperty="holiId"
+            keyColumn="HOLI_ID">
         INSERT
           INTO HOLIDAY_MST
           (
-          , HOLI_NM
+            HOLI_NM
           , REG_DTM
           , REG_ID
           , MOD_DTM
@@ -17,7 +21,7 @@
           )
         VALUES
           (
-          , #{holi.holiNm}
+            #{holi.holiNm}
           , DATE_FORMAT(NOW(), '%Y%m%d')
           , 'SYS'
           , DATE_FORMAT(NOW(), '%Y%m%d')
@@ -25,7 +29,6 @@
           )
         ON DUPLICATE KEY UPDATE
            HOLI_NM = #{holi.holiNm}
-         , SCHED_DATE = #{holi.schedDate}
          , MOD_DTM = DATE_FORMAT(NOW(), '%Y%m%d')
          , MOD_ID = 'SYS'
     </insert>
