@@ -11,7 +11,7 @@ import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.YN;
 @Data
 public class schedHist {
 
-		private Long schedHistId;
+			private Long schedHistId;
 	private Long schedId;
 	private String acctId;
 	private String mstId;
