@@ -1,3 +1,4 @@
 /gradlew text eol=lf
 *.bat text eol=crlf
 *.jar binary
+config/checkstyle/*.xml text eol=lf
