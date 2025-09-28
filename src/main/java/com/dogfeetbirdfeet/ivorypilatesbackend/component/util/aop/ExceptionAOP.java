@@ -27,8 +27,8 @@ public class ExceptionAOP {
 	 * @param joinPoint 실행되는 메서드
 	 * @param ex Exception
 	 */
-	@AfterThrowing(pointcut = "within(com.dogfeetbirdfeet.ivorypilatesbackend..*) || within(com.dogfeetbirdfeet.ivorypilatesbackend..*)", throwing = "ex")
-	public void logException(JoinPoint joinPoint, Throwable ex) {
+	@AfterThrowing(pointcut = "within(com.dogfeetbirdfeet.ivorypilatesbackend..*) || within(com.dogfeetbirdfeet.ivorypilatesbackend..*)", throwing = "ex") public void logException(
+		JoinPoint joinPoint, Throwable ex) {
 		String method = joinPoint.getSignature().toShortString();
 		String args = Arrays.toString(joinPoint.getArgs());
 		logger.error("Exception in {} with args={} -> {}: {}",

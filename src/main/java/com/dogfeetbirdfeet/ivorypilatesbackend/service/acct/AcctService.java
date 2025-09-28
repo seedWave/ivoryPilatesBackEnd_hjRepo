@@ -33,8 +33,7 @@ public class AcctService {
 	 * @param acctId 대상 계정 아이디
 	 * @return 계정 정보
 	 */
-	public Acct getAcctById(@Param("acctId")
-	String acctId) {
+	public Acct getAcctById(@Param("acctId") String acctId) {
 
 		return postProcessingAcctTable(acctMapper.getAcctById(acctId));
 	}
@@ -84,8 +83,7 @@ public class AcctService {
 	 * @param userId 생성하는 계정 ID
 	 * @return 생성된 객체 정보
 	 */
-	@Transactional(rollbackFor = Exception.class)
-	public ServiceResult<Acct> insertAcct(Acct acct, String userId) {
+	@Transactional(rollbackFor = Exception.class) public ServiceResult<Acct> insertAcct(Acct acct, String userId) {
 
 		ResponseMsg fsMsg = commonMethod.returnResultByResponseMsg(
 			acctMapper.insertAcct(acct, userId));

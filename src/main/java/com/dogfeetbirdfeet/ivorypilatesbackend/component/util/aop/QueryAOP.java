@@ -47,14 +47,11 @@ public class QueryAOP {
 
 	private final SqlSessionFactory sqlSessionFactory;
 
-	@Value("${aop.query.enabled}")
-	private boolean enabled;
+	@Value("${aop.query.enabled}") private boolean enabled;
 
-	@Value("${aop.query.print-result}")
-	private boolean printResultSummary;
+	@Value("${aop.query.print-result}") private boolean printResultSummary;
 
-	@Value("${aop.query.truncate-len}")
-	private int truncateLen;
+	@Value("${aop.query.truncate-len}") private int truncateLen;
 
 	/**
 	 * Mapper Interface 전역 PointCut
@@ -62,8 +59,8 @@ public class QueryAOP {
 	 * @return 쿼리문
 	 * @throws Throwable Exception 발생 시 대응
 	 */
-	@Around("execution(* com.dogfeetbirdfeet.ivorypilatesbackend.mapper..*.*(..))")
-	public Object logSqlAround(ProceedingJoinPoint pjp) throws Throwable {
+	@Around("execution(* com.dogfeetbirdfeet.ivorypilatesbackend.mapper..*.*(..))") public Object logSqlAround(
+		ProceedingJoinPoint pjp) throws Throwable {
 		if (!enabled)
 			return pjp.proceed();
 

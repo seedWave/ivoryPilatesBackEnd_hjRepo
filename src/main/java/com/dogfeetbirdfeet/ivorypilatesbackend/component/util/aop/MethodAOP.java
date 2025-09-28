@@ -25,8 +25,7 @@ public class MethodAOP {
 	 * 메서드 실행 전 AOP
 	 * @param joinPoint 실행되는 메서드
 	 */
-	@Before("execution(* com.dogfeetbirdfeet.ivorypilatesbackend..*(..))")
-	public void logBefore(JoinPoint joinPoint) {
+	@Before("execution(* com.dogfeetbirdfeet.ivorypilatesbackend..*(..))") public void logBefore(JoinPoint joinPoint) {
 
 		logger.info("Before {}", joinPoint.getSignature().getName());
 
@@ -36,8 +35,7 @@ public class MethodAOP {
 	 * 메서드 실행 후 AOP
 	 * @param joinPoint 실행되는 메서드
 	 */
-	@After("execution(* com.dogfeetbirdfeet.ivorypilatesbackend..*(..))")
-	public void logAfter(JoinPoint joinPoint) {
+	@After("execution(* com.dogfeetbirdfeet.ivorypilatesbackend..*(..))") public void logAfter(JoinPoint joinPoint) {
 		logger.info("After {}", joinPoint.getSignature().getName());
 	}
 

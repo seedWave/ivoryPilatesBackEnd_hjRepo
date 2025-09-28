@@ -38,8 +38,8 @@ public class HolidayMstService {
 	 * @param holidayMsts 공휴일 목록
 	 * @return 첫 번째 공휴일 반환한다.
 	 */
-	@Transactional
-	public ServiceResult<HolidayMstWithSchedDate> insertHolidayMst(List<HolidayMstWithSchedDate> holidayMsts) {
+	@Transactional public ServiceResult<HolidayMstWithSchedDate> insertHolidayMst(
+		List<HolidayMstWithSchedDate> holidayMsts) {
 
 		for (HolidayMstWithSchedDate holidayMst : holidayMsts) {
 

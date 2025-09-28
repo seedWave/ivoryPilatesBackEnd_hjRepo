@@ -37,8 +37,7 @@ import com.dogfeetbirdfeet.ivorypilatesbackend.service.holidayMst.HolidayMstServ
 public class ApiService {
 
 	private final CommonMethod commonMethod;
-	@Value("${api.data-go-kr.key}")
-	private String apiKey;
+	@Value("${api.data-go-kr.key}") private String apiKey;
 
 	private final HolidayMstService holidayMstService;
 	private static final Logger API_LOG = LoggerFactory.getLogger("API_LOG");
@@ -55,8 +54,7 @@ public class ApiService {
 	 * 대상 테이블은 CAL_MST
 	 * 모든 캘린더성 테이블은 CAL_MST - CAL_REL 을 기반으로 작동한다.
 	 */
-	@Transactional(rollbackFor = Exception.class)
-	public void makeCalender(String staYmd) {
+	@Transactional(rollbackFor = Exception.class) public void makeCalender(String staYmd) {
 
 		// 20000101 ~ 99991231까지 25년 단위로 반복한다.
 
@@ -95,8 +93,7 @@ public class ApiService {
 	 * @param solYear 대상 년도
 	 * @param solMonth 대상 월
 	 */
-	@Transactional(rollbackFor = Exception.class)
-	public void getHolidayExplorer(String solYear, String solMonth) {
+	@Transactional(rollbackFor = Exception.class) public void getHolidayExplorer(String solYear, String solMonth) {
 
 		/*URL*/
 		String urlBuilder = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?"
@@ -128,8 +125,8 @@ public class ApiService {
 	 * @param requestURL 대상 경로 (공공데이터 포털)
 	 * @throws IOException 입출력 오류
 	 */
-	@Transactional(rollbackFor = Exception.class)
-	public void getResultFromConnection(URL requestURL) throws IOException {
+	@Transactional(rollbackFor = Exception.class) public void getResultFromConnection(URL requestURL)
+		throws IOException {
 
 		HttpURLConnection conn = (HttpURLConnection)requestURL.openConnection();
 		BufferedReader rd = null;
@@ -176,8 +173,7 @@ public class ApiService {
 	 *
 	 * @param jsonObject 공공데이터 포탈에서 받아온 결과값
 	 */
-	@Transactional(rollbackFor = Exception.class)
-	public void tableInsert(JSONObject jsonObject) {
+	@Transactional(rollbackFor = Exception.class) public void tableInsert(JSONObject jsonObject) {
 
 		int totalCount = jsonObject.getInt("totalCount");
 		API_LOG.info("totalCount [{}]", totalCount);

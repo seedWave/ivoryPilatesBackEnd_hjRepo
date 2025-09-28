@@ -11,8 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class SHA_256 {
 
-	@Value("${salt}")
-	private static String salt;
+	@Value("${salt}") private static String salt;
 
 	/**
 	 * 평문을 SHA-256 방식으로 암호화한다.

@@ -24,8 +24,7 @@ public class SecurityConfig {
 	/**
 	 * Spring Security Filter Chain 정의
 	 */
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	@Bean public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http
 			// HTTP Basic 인증 비활성화 및 401 에러 리턴
@@ -56,8 +55,7 @@ public class SecurityConfig {
 	 * CORS 설정 정의
 	 * - 프론트엔드와 도메인이 다른 경우에도 요청 허용
 	 */
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
+	@Bean public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(
 			List.of("http://localhost:3000", "https://localhost:3000" // 로컬 환경

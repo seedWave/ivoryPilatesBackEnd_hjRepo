@@ -38,18 +38,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @WithMockUser("nks")
 public class AcctControllerSelectTest {
 
-	@Autowired
-	private MockMvc mockMvc;
+	@Autowired private MockMvc mockMvc;
 
-	@MockitoBean
-	private AcctService acctService;
+	@MockitoBean private AcctService acctService;
 
-	@Autowired
-	private ObjectMapper objectMapper;
+	@Autowired private ObjectMapper objectMapper;
 
 	@Test
-	@DisplayName("GET /acct - 계정 조회 API 테스트 - 성공")
-	void getAcctByIdTestSuccess() throws Exception {
+	@DisplayName("GET /acct - 계정 조회 API 테스트 - 성공") void getAcctByIdTestSuccess() throws Exception {
 
 		// ✅ Given
 		Acct acctDto = new Acct();
@@ -95,8 +91,7 @@ public class AcctControllerSelectTest {
 	}
 
 	@Test
-	@DisplayName("GET /acct - 계정 조회 API 테스트 - 실패")
-	void getAcctByIdTestFail() throws Exception {
+	@DisplayName("GET /acct - 계정 조회 API 테스트 - 실패") void getAcctByIdTestFail() throws Exception {
 
 		// ✅ Given
 		Acct acctDto = new Acct();

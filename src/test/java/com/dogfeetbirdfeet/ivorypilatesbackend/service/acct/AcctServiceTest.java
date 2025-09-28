@@ -30,8 +30,7 @@ public class AcctServiceTest {
 	}
 
 	@Test
-	@DisplayName("GET /acct - 계정 조회 API 테스트 - 성공")
-	void testGetAcctByIdTestSuccess() {
+	@DisplayName("GET /acct - 계정 조회 API 테스트 - 성공") void testGetAcctByIdTestSuccess() {
 
 		// ✅ Arrange
 		Acct acctDto = new Acct();
@@ -87,8 +86,7 @@ public class AcctServiceTest {
 	}
 
 	@Test
-	@DisplayName("Service: getAcctById - 실패(null)")
-	void testGetAcctById_Fail_Null() {
+	@DisplayName("Service: getAcctById - 실패(null)") void testGetAcctById_Fail_Null() {
 		AcctMapper mockMapper = mock(AcctMapper.class);
 		when(mockMapper.getAcctById("B000001")).thenReturn(null);
 
