@@ -17,8 +17,8 @@
              , REG_ID
              , MOD_DTM
              , MOD_ID
-          FROM ACCT
-         ORDER BY ACCT_ID
+        FROM ACCT
+        ORDER BY ACCT_ID
     </select>
 
     <select id="getAcctById" resultType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.Acct">
@@ -33,41 +33,36 @@
              , REG_ID
              , MOD_DTM
              , MOD_ID
-          FROM ACCT
-         WHERE ACCT_ID = #{acctId}
-         ORDER BY ACCT_ID
+        FROM ACCT
+        WHERE ACCT_ID = #{acctId}
+        ORDER BY ACCT_ID
     </select>
 
     <insert id="insertAcct">
         INSERT
-          INTO ACCT
-          (
-            ACCT_ID
-          , ACCT_PW
-          , NAME
-          , CONTACT
-          , BIRTH_DATE
-          , GENDER
-          , ACTIVE_YN
-          , REG_DTM
-          , REG_ID
-          , MOD_DTM
-          , MOD_ID
-          )
-        VALUES
-          (
-            #{acct.acctId}
-          , #{acct.acctPw}
-          , #{acct.name}
-          , #{acct.contact}
-          , #{acct.birthDate}
-          , #{acct.gender}
-          , #{acct.activeYn}
-          , DATE_FORMAT(NOW(), '%Y%m%d')
-          , #{userId}
-          , DATE_FORMAT(NOW(), '%Y%m%d')
-          , #{userId}
-          )
+        INTO ACCT
+        ( ACCT_ID
+        , ACCT_PW
+        , NAME
+        , CONTACT
+        , BIRTH_DATE
+        , GENDER
+        , ACTIVE_YN
+        , REG_DTM
+        , REG_ID
+        , MOD_DTM
+        , MOD_ID)
+        VALUES ( #{acct.acctId}
+               , #{acct.acctPw}
+               , #{acct.name}
+               , #{acct.contact}
+               , #{acct.birthDate}
+               , #{acct.gender}
+               , #{acct.activeYn}
+               , DATE_FORMAT(NOW(), '%Y%m%d')
+               , #{userId}
+               , DATE_FORMAT(NOW(), '%Y%m%d')
+               , #{userId})
     </insert>
 
 </mapper>

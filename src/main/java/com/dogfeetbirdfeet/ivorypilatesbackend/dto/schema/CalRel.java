@@ -1,6 +1,7 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.CalType;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.CalType;
+
 import lombok.Data;
 
 /**
@@ -10,7 +11,7 @@ import lombok.Data;
 @Data
 public class CalRel {
 
-    private Long calId;
-    private CalType calType;
-    private Long tarId;
+	private Long calId;
+	private CalType calType;
+	private Long tarId;
 }

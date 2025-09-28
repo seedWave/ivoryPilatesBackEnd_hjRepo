@@ -11,4 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @ConditionalOnProperty(value = "schedule.use", havingValue = "true")
 @EnableScheduling
-public class SchedulingToggleConfig {}
+public class SchedulingToggleConfig {
+
+}

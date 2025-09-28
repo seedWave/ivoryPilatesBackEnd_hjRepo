@@ -2,15 +2,15 @@ package com.dogfeetbirdfeet.ivorypilatesbackend.service.acct;
 
 import java.util.List;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.maker.ServiceResult;
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonMethod.CommonMethod;
+import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonmethod.CommonMethod;
+import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.maker.ServiceResult;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.ResponseMsg;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.Acct;
 import com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AcctService {
@@ -67,32 +67,34 @@ public class AcctService {
 	 */
 	public Acct postProcessingAcctTable(Acct user) {
 
-		if (null == user) return null;
-		user.setBirthDate(null != user.getBirthDate()  ? commonMethod.translateDate(user.getBirthDate()) : null);
+		if (null == user) {
+			return null;
+		}
+
+		user.setBirthDate(null != user.getBirthDate() ? commonMethod.translateDate(user.getBirthDate()) : null);
 		user.setRegDtm(null != user.getRegDtm() ? commonMethod.translateDate(user.getRegDtm()) : null);
 		user.setModDtm(null != user.getModDtm() ? commonMethod.translateDate(user.getModDtm()) : null);
 
 		return user;
 	}
 
-    /**
-     * 계정 생성
-     *
-     * @param acct 생성 계정 객체
-     * @param userId 생성하는 계정 ID
-     * @return 생성된 객체 정보
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public ServiceResult<Acct> insertAcct(Acct acct, String userId) {
+	/**
+	 * 계정 생성
+	 *
+	 * @param acct 생성 계정 객체
+	 * @param userId 생성하는 계정 ID
+	 * @return 생성된 객체 정보
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public ServiceResult<Acct> insertAcct(Acct acct, String userId) {
 
-        ResponseMsg fsMsg = commonMethod.returnResultByResponseMsg(
-                acctMapper.insertAcct(acct, userId)
-        );
+		ResponseMsg fsMsg = commonMethod.returnResultByResponseMsg(
+			acctMapper.insertAcct(acct, userId));
 
-        if (!fsMsg.equals(ResponseMsg.ON_SUCCESS)) {
-            return ServiceResult.failure(fsMsg);
-        }
+		if (!fsMsg.equals(ResponseMsg.ON_SUCCESS)) {
+			return ServiceResult.failure(fsMsg);
+		}
 
-        return ServiceResult.success(() -> getAcctById(acct.getAcctId()));
-    }
+		return ServiceResult.success(() -> getAcctById(acct.getAcctId()));
+	}
 }

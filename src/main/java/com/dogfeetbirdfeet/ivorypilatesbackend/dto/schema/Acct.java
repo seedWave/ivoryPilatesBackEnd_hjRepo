@@ -1,7 +1,7 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.YN;
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.Gender;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.Gender;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.YN;
 
 import lombok.Data;
 
@@ -12,15 +12,15 @@ import lombok.Data;
 @Data
 public class Acct {
 
-    private String acctId;
-    private String acctPw;
-    private String name;
-    private String contact;
-    private String birthDate;
-    private Gender gender;
-    private YN activeYn;
-    private String regDtm;
-    private String regId;
-    private String modDtm;
-    private String modId;
+	private String acctId;
+	private String acctPw;
+	private String name;
+	private String contact;
+	private String birthDate;
+	private Gender gender;
+	private YN activeYn;
+	private String regDtm;
+	private String regId;
+	private String modDtm;
+	private String modId;
 }

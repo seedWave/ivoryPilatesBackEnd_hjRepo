@@ -1,45 +1,91 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.4'
-	id 'io.spring.dependency-management' version '1.1.7'
-	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'java'
+    id 'org.springframework.boot' version '3.5.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'checkstyle'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
+
+asciidoctor {
+    sourceDir = file('src')
+    sources {
+        include 'index.adoc'
+    }
+    resources {
+        from(sourceDir) {
+            include 'images/**'
+        }
+    }
+    outputOptions {
+        separateOutputDirs = false
+        backends = ['html5']
+    }
+    baseDirFollowsSourceFile()
+}
+
 
 group = 'com.dogfeetbirdfeet'
 version = '0.0.1-SNAPSHOT'
 
+repositories {
+    mavenCentral()
+}
+
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(24)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+    }
+}
+
+checkstyle {
+    toolVersion = '10.17.0'  // 최신 너무 높은 버전이면 규칙 충돌 가능 → 10.12~10.17 권장
+    configFile = file("$rootDir/rule-config/naver-checkstyle-rules.xml").absoluteFile
+    configProperties = [
+            'suppressionFile': file("$rootDir/rule-config/suppressions.xml").absolutePath
+    ]
+    maxWarnings = 0
+}
+
+spotless {
+    java {
+
+        eclipse().configFile("$rootDir/rule-config/naver-eclipse-formatter.xml")
+
+        // ✅ Naver import 레이아웃을 반영
+        importOrder("java","javax","org","net","com","", "com.nhncorp","com.navercorp","com.naver")
+        removeUnusedImports()
+
+        // 대상/제외
+        target 'src/**/*.java'
+        targetExclude '**/build/**', '**/out/**', 'src/generated/**'
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
-repositories {
-	mavenCentral()
-}
+
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
+    set('snippetsDir', file("build/generated-snippets"))
 }
 
 dependencies {
 
-	// ✅ REST API용
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    // ✅ REST API용
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	// ✅ Security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+    // ✅ Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	// ✅ MyBatis + DB
-	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3") // MyBatis
-	implementation("org.springframework.boot:spring-boot-starter-jdbc")   // JDBC 기본 지원
-	runtimeOnly 'com.mysql:mysql-connector-j'
+    // ✅ MyBatis + DB
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3") // MyBatis
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")   // JDBC 기본 지원
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // ✅ AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
@@ -47,29 +93,43 @@ dependencies {
     // ✅ JSON
     implementation 'org.json:json:20240303'
 
-	// ✅ Lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    // ✅ Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	// ✅ Devtools
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // ✅ Devtools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // ✅ Reflection
     implementation 'org.reflections:reflections:0.9.12'
 
-	// ✅ TEST
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // ✅ TEST
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
-	outputs.dir snippetsDir
-	useJUnitPlatform()
+    outputs.dir snippetsDir
+    useJUnitPlatform()
 }
 
 tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
+    inputs.dir snippetsDir
+    dependsOn test
 }
+
+// 한 번에 관리할 가상 태스크
+tasks.register("verifyStyle") {
+    dependsOn "spotlessCheck", "checkstyleMain", "checkstyleTest"
+}
+
+// build(=assemble+check)는 원래 check에 의존하지만, 명시적으로 한 번 더 고정
+tasks.named("build") { dependsOn("verifyStyle") }
+
+// bootRun 해도 반드시 검사 통과해야 실행되도록
+tasks.named("bootRun") { dependsOn("verifyStyle") }
+
+// 컴파일 전에 자동 포맷 적용(자동수정 원치 않으면 spotlessCheck로 바꿔도 됨)
+tasks.named("compileJava") { dependsOn("spotlessApply") }

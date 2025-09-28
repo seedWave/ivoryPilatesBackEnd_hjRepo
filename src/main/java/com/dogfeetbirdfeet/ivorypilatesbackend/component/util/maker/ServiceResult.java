@@ -1,11 +1,10 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.component.util.maker;
 
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.ResponseMsg;
 
 /**
  * @author nks
@@ -21,8 +20,7 @@ import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg;
 public record ServiceResult<T>(
 	ResponseMsg status,
 	Supplier<T> onSuccess,
-	Map<String, Object> details
-) {
+	Map<String, Object> details) {
 	public ServiceResult {
 		Objects.requireNonNull(status, "status");
 		// onSuccess는 실패 케이스에서 null 허용

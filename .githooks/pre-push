@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ---------- JDK 경로 보정 (필요 시 수정) ----------
+if [ -z "${JAVA_HOME:-}" ]; then
+  # 1) IntelliJ 번들 JBR 우선
+  if [ -d "/c/Program Files/JetBrains/IntelliJ IDEA 2024.3.5/jbr" ]; then
+    export JAVA_HOME="/c/Program Files/JetBrains/IntelliJ IDEA 2024.3.5/jbr"
+  # 2) 일반 JDK (예시 경로, 환경에 맞게 바꾸세요)
+  elif [ -d "/c/Program Files/Java/jdk-21" ]; then
+    export JAVA_HOME="/c/Program Files/Java/jdk-21"
+  fi
+  export PATH="$JAVA_HOME/bin:$PATH"
+fi
+# -----------------------------------------------
+
+echo "🔎 Verifying code style before push (spotless + checkstyle)..." >&2
+
+# Windows/Unix 모두 동작하도록 gradle wrapper 호출
+if [ -f "./gradlew" ]; then
+  ./gradlew --no-daemon -q spotlessCheck checkstyleMain
+else
+  cmd /c "gradlew.bat --no-daemon -q spotlessCheck checkstyleMain"
+fi
+
+echo "✅ Style checks passed. Proceeding with push." >&2

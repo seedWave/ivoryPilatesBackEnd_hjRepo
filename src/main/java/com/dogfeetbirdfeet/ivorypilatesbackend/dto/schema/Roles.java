@@ -1,6 +1,6 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.Role;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.Role;
 
 import lombok.Data;
 

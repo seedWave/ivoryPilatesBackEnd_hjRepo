@@ -19,5 +19,4 @@ public class Certificate {
 	private String modDtm;
 	private String modId;
 
-
 }

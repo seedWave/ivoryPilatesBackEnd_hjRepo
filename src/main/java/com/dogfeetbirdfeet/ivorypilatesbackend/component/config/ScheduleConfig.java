@@ -42,24 +42,20 @@ public class ScheduleConfig {
 
 		String thisYear = Year.now(ZoneId.of("Asia/Seoul")).toString();
 		String nextYear = Year.now(ZoneId.of("Asia/Seoul")).plusYears(1).toString();
-		String twoYear  = Year.now(ZoneId.of("Asia/Seoul")).plusYears(2).toString();
+		String twoYear = Year.now(ZoneId.of("Asia/Seoul")).plusYears(2).toString();
 
-		try
-		{
-			if(useIvoryHolidaySchedule) {
+		try {
+			if (useIvoryHolidaySchedule) {
 
-				for (int i = 1; i <= 12; i++)
-				{
+				for (int i = 1; i <= 12; i++) {
 					apiService.getHolidayExplorer(thisYear, i < 10 ? "0" + i : i + "");
 				}
 
-				for (int i = 1; i <= 12; i++)
-				{
+				for (int i = 1; i <= 12; i++) {
 					apiService.getHolidayExplorer(nextYear, i < 10 ? "0" + i : i + "");
 				}
 
-				for (int i = 1; i <= 12; i++)
-				{
+				for (int i = 1; i <= 12; i++) {
 					apiService.getHolidayExplorer(twoYear, i < 10 ? "0" + i : i + "");
 				}
 			}

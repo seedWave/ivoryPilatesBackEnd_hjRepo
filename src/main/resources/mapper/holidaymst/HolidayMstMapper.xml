@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dogfeetbirdfeet.ivorypilatesbackend.mapper.holidaymst.HolidayMstMapper">
+
+    <insert id="insertHoliday"
+            parameterType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.datadto.HolidayMstWithSchedDate"
+            useGeneratedKeys="true"
+            keyProperty="holiId"
+            keyColumn="HOLI_ID">
+        INSERT
+        INTO HOLIDAY_MST
+        ( HOLI_NM
+        , REG_DTM
+        , REG_ID
+        , MOD_DTM
+        , MOD_ID)
+        VALUES ( #{holi.holiNm}
+               , DATE_FORMAT(NOW(), '%Y%m%d')
+               , 'SYS'
+               , DATE_FORMAT(NOW(), '%Y%m%d')
+               , 'SYS')
+        ON DUPLICATE KEY UPDATE HOLI_NM = #{holi.holiNm}
+                              , MOD_DTM = DATE_FORMAT(NOW(), '%Y%m%d')
+                              , MOD_ID  = 'SYS'
+    </insert>
+
+
+</mapper>
