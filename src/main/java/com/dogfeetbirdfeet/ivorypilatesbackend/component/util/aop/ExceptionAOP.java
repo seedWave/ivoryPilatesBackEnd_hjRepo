@@ -20,21 +20,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ExceptionAOP {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    /**
-     * Exception 발생 시 AOP
-     * @param joinPoint 실행되는 메서드
-     * @param ex Exception
-     */
-    @AfterThrowing(
-            pointcut = "within(com.dogfeetbirdfeet.ivorypilatesbackend..*) || within(com.dogfeetbirdfeet.ivorypilatesbackend..*)",
-            throwing = "ex"
-    )
-    public void logException(JoinPoint joinPoint, Throwable ex) {
-        String method = joinPoint.getSignature().toShortString();
-        String args = Arrays.toString(joinPoint.getArgs());
-        logger.error("Exception in {} with args={} -> {}: {}",
-                method, args, ex.getClass().getSimpleName(), ex.getMessage(), ex);
-    }
+	/**
+	 * Exception 발생 시 AOP
+	 * @param joinPoint 실행되는 메서드
+	 * @param ex Exception
+	 */
+	@AfterThrowing(
+		pointcut = "within(com.dogfeetbirdfeet.ivorypilatesbackend..*) || within(com.dogfeetbirdfeet.ivorypilatesbackend..*)",
+		throwing = "ex"
+	)
+	public void logException(JoinPoint joinPoint, Throwable ex) {
+		String method = joinPoint.getSignature().toShortString();
+		String args = Arrays.toString(joinPoint.getArgs());
+		logger.error("Exception in {} with args={} -> {}: {}",
+			method, args, ex.getClass().getSimpleName(), ex.getMessage(), ex);
+	}
 }

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class SHA_256 {
 
-
 	@Value("${salt}")
 	private static String salt;
 
@@ -38,7 +37,8 @@ public class SHA_256 {
 
 		StringBuilder builder = new StringBuilder();
 
-		for (byte b: bytes) builder.append(String.format("%02x", b));
+		for (byte b : bytes)
+			builder.append(String.format("%02x", b));
 
 		return builder.toString();
 	}

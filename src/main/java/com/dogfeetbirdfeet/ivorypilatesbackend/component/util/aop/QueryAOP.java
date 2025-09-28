@@ -4,7 +4,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.temporal.TemporalAccessor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ibatis.annotations.Param;
@@ -15,15 +22,12 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandlerRegistry;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 
@@ -60,9 +64,10 @@ public class QueryAOP {
 	 */
 	@Around("execution(* com.dogfeetbirdfeet.ivorypilatesbackend.mapper..*.*(..))")
 	public Object logSqlAround(ProceedingJoinPoint pjp) throws Throwable {
-		if (!enabled) return pjp.proceed();
+		if (!enabled)
+			return pjp.proceed();
 
-		MethodSignature sig = (MethodSignature) pjp.getSignature();
+		MethodSignature sig = (MethodSignature)pjp.getSignature();
 		Method method = sig.getMethod();
 		String statementId = sig.getDeclaringTypeName() + "." + sig.getName();
 		Object[] args = pjp.getArgs();
@@ -80,7 +85,8 @@ public class QueryAOP {
 				SQL_LOG.info("[SQL][{}] <proceeded> took={}ms {}", statementId, tookMs, summarizeResult(result));
 				return result;
 			} catch (Throwable ex) {
-				SQL_LOG.error("[SQL][{}] threw: {} - {}", statementId, ex.getClass().getSimpleName(), ex.getMessage(), ex);
+				SQL_LOG.error("[SQL][{}] threw: {} - {}", statementId, ex.getClass().getSimpleName(), ex.getMessage(),
+					ex);
 				throw ex;
 			}
 		}
@@ -119,7 +125,8 @@ public class QueryAOP {
 	 * @return Parameter Map
 	 */
 	private Object buildParameterObject(Method method, Object[] args) {
-		if (args == null || args.length == 0) return null;
+		if (args == null || args.length == 0)
+			return null;
 
 		Annotation[][] anns = method.getParameterAnnotations();
 
@@ -131,7 +138,7 @@ public class QueryAOP {
 			if (anns.length > 0) {
 				for (Annotation a : anns[0]) {
 					if (a instanceof Param) {
-						paramName = ((Param) a).value();
+						paramName = ((Param)a).value();
 						break;
 					}
 				}
@@ -160,17 +167,18 @@ public class QueryAOP {
 
 		// 다중 파라미터: param1..N + @Param 이름 모두 제공
 		Map<String, Object> paramMap = new LinkedHashMap<>();
-		for (int i = 0; i < args.length; i++) paramMap.put("param" + (i + 1), args[i]);
+		for (int i = 0; i < args.length; i++)
+			paramMap.put("param" + (i + 1), args[i]);
 		for (int i = 0; i < anns.length; i++) {
 			for (Annotation a : anns[i]) {
-				if (a instanceof Param) paramMap.put(((Param) a).value(), args[i]);
+				if (a instanceof Param)
+					paramMap.put(((Param)a).value(), args[i]);
 			}
 		}
 		// MyBatis 관례 키
 		paramMap.put("_parameter", paramMap);
 		return paramMap;
 	}
-
 
 	/**
 	 * BoundSql의 '?'를 실제 리터럴로 치환 (XML의 개행/들여쓰기 유지)
@@ -182,7 +190,8 @@ public class QueryAOP {
 
 		String sql = boundSql.getSql();
 		List<ParameterMapping> mappings = boundSql.getParameterMappings();
-		if (mappings == null || mappings.isEmpty()) return sql;
+		if (mappings == null || mappings.isEmpty())
+			return sql;
 
 		TypeHandlerRegistry registry = cfg.getTypeHandlerRegistry();
 
@@ -254,11 +263,12 @@ public class QueryAOP {
 	private int indexOfFirstDotOrBracket(String s) {
 		int d = s.indexOf('.');
 		int b = s.indexOf('[');
-		if (d == -1) return b;
-		if (b == -1) return d;
+		if (d == -1)
+			return b;
+		if (b == -1)
+			return d;
 		return Math.min(d, b);
 	}
-
 
 	/**
 	 * 타입 확인
@@ -276,11 +286,13 @@ public class QueryAOP {
 	 * @return SQL 리터럴 문자열
 	 */
 	private String toSqlLiteral(Object v) {
-		if (v == null) return "NULL";
-		if (v instanceof Boolean || v instanceof Number) return String.valueOf(v);
+		if (v == null)
+			return "NULL";
+		if (v instanceof Boolean || v instanceof Number)
+			return String.valueOf(v);
 
 		if (v instanceof Date) {
-			return "'" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Date) v) + "'";
+			return "'" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Date)v) + "'";
 		}
 		if (v instanceof TemporalAccessor) {
 			return "'" + v + "'";
@@ -288,16 +300,19 @@ public class QueryAOP {
 		if (v.getClass().isArray()) {
 			int len = java.lang.reflect.Array.getLength(v);
 			List<String> parts = new ArrayList<>(len);
-			for (int i = 0; i < len; i++) parts.add(toSqlLiteral(java.lang.reflect.Array.get(v, i)));
+			for (int i = 0; i < len; i++)
+				parts.add(toSqlLiteral(java.lang.reflect.Array.get(v, i)));
 			return "(" + String.join(", ", parts) + ")";
 		}
 		if (v instanceof Collection<?>) {
 			List<String> parts = new ArrayList<>();
-			for (Object o : (Collection<?>) v) parts.add(toSqlLiteral(o));
+			for (Object o : (Collection<?>)v)
+				parts.add(toSqlLiteral(o));
 			return "(" + String.join(", ", parts) + ")";
 		}
 		String s = String.valueOf(v);
-		if (s.length() > truncateLen) s = s.substring(0, truncateLen) + "...";
+		if (s.length() > truncateLen)
+			s = s.substring(0, truncateLen) + "...";
 		s = s.replace("'", "''"); // escape
 		return "'" + s + "'";
 	}
@@ -309,11 +324,16 @@ public class QueryAOP {
 	 */
 
 	private String summarizeResult(Object result) {
-		if (result == null) return "[result=null]";
-		if (result instanceof Collection<?>) return "[result=list size=" + ((Collection<?>) result).size() + "]";
-		if (result.getClass().isArray()) return "[result=array length=" + java.lang.reflect.Array.getLength(result) + "]";
-		if (result instanceof Map<?, ?>) return "[result=map size=" + ((Map<?, ?>) result).size() + "]";
-		if (result instanceof Integer || result instanceof Long) return "[result=affected=" + result + "]";
+		if (result == null)
+			return "[result=null]";
+		if (result instanceof Collection<?>)
+			return "[result=list size=" + ((Collection<?>)result).size() + "]";
+		if (result.getClass().isArray())
+			return "[result=array length=" + java.lang.reflect.Array.getLength(result) + "]";
+		if (result instanceof Map<?, ?>)
+			return "[result=map size=" + ((Map<?, ?>)result).size() + "]";
+		if (result instanceof Integer || result instanceof Long)
+			return "[result=affected=" + result + "]";
 		return "[result=" + result.getClass().getSimpleName() + "]";
 	}
 

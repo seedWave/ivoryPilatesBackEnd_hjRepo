@@ -1,45 +1,45 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.4'
-	id 'io.spring.dependency-management' version '1.1.7'
-	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'java'
+    id 'org.springframework.boot' version '3.5.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 group = 'com.dogfeetbirdfeet'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(24)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
+    set('snippetsDir', file("build/generated-snippets"))
 }
 
 dependencies {
 
-	// ✅ REST API용
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    // ✅ REST API용
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	// ✅ Security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+    // ✅ Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	// ✅ MyBatis + DB
-	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3") // MyBatis
-	implementation("org.springframework.boot:spring-boot-starter-jdbc")   // JDBC 기본 지원
-	runtimeOnly 'com.mysql:mysql-connector-j'
+    // ✅ MyBatis + DB
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3") // MyBatis
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")   // JDBC 기본 지원
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // ✅ AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
@@ -47,29 +47,29 @@ dependencies {
     // ✅ JSON
     implementation 'org.json:json:20240303'
 
-	// ✅ Lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    // ✅ Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	// ✅ Devtools
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // ✅ Devtools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // ✅ Reflection
     implementation 'org.reflections:reflections:0.9.12'
 
-	// ✅ TEST
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // ✅ TEST
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
-	outputs.dir snippetsDir
-	useJUnitPlatform()
+    outputs.dir snippetsDir
+    useJUnitPlatform()
 }
 
 tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
+    inputs.dir snippetsDir
+    dependsOn test
 }

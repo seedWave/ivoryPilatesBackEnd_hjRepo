@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public class HolidayMstWithSchedDate {
 
-    private Long holiId;
-    private String holiNm;
-    private String schedDate;
-    private String regDtm;
-    private String regId;
-    private String modDtm;
-    private String modId;
+	private Long holiId;
+	private String holiNm;
+	private String schedDate;
+	private String regDtm;
+	private String regId;
+	private String modDtm;
+	private String modId;
 }
