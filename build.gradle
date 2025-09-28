@@ -22,7 +22,7 @@ java {
 
 checkstyle {
     toolVersion = '10.17.0'  // 최신 너무 높은 버전이면 규칙 충돌 가능 → 10.12~10.17 권장
-    config = resources.text.fromFile("$rootDir/config/checkstyle/naver-checkstyle.xml")
+    configFile = file("$rootDir/config/checkstyle/naver-checkstyle.xml").absoluteFile
     maxWarnings = 0
 }
 
