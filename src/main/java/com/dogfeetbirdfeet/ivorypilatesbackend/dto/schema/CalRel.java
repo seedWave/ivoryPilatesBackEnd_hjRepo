@@ -1,6 +1,6 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.CalType;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.CalType;
 
 import lombok.Data;
 

@@ -25,7 +25,8 @@ public class ScheduleConfig {
 	private static final Logger API_LOG = LoggerFactory.getLogger("API_LOG");
 	private final ApiService apiService;
 
-	@Value("${schedule.ivory-holiday.useItem}") private boolean useIvoryHolidaySchedule;
+	@Value("${schedule.ivory-holiday.useItem}")
+	private boolean useIvoryHolidaySchedule;
 
 	/**
 	 * @author nks
@@ -36,7 +37,8 @@ public class ScheduleConfig {
 	 * 가져올 때 당해 년도, 내년, 내 후년까지 2년 데이터를 가져온다.
 	 * </p>
 	 */
-	@Scheduled(cron = "${schedule.ivory-holiday.cron}") public void ivoryHoliday() {
+	@Scheduled(cron = "${schedule.ivory-holiday.cron}")
+	public void ivoryHoliday() {
 
 		String thisYear = Year.now(ZoneId.of("Asia/Seoul")).toString();
 		String nextYear = Year.now(ZoneId.of("Asia/Seoul")).plusYears(1).toString();

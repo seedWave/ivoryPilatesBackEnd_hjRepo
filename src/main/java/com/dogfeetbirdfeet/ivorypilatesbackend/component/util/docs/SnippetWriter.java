@@ -26,9 +26,9 @@ public class SnippetWriter {
 
 	public void writeJson(String relative, Object obj) {
 		try {
-			Path p = ensurePath(relative);
+			Path path = ensurePath(relative);
 			String json = om.writeValueAsString(obj);
-			Files.writeString(p, json, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
+			Files.writeString(path, json, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
 				StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -37,8 +37,8 @@ public class SnippetWriter {
 
 	public void writeAdoc(String relative, String content) {
 		try {
-			Path p = ensurePath(relative);
-			Files.writeString(p, content, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
+			Path path = ensurePath(relative);
+			Files.writeString(path, content, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
 				StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -50,8 +50,8 @@ public class SnippetWriter {
 	}
 
 	private Path ensurePath(String relative) throws IOException {
-		Path p = snippetsDir.resolve(relative);
-		Files.createDirectories(p.getParent());
-		return p;
+		Path path = snippetsDir.resolve(relative);
+		Files.createDirectories(path.getParent());
+		return path;
 	}
 }

@@ -7,6 +7,24 @@ plugins {
     id 'com.diffplug.spotless' version '6.25.0'
 }
 
+asciidoctor {
+    sourceDir = file('src')
+    sources {
+        include 'index.adoc'
+    }
+    resources {
+        from(sourceDir) {
+            include 'images/**'
+        }
+    }
+    outputOptions {
+        separateOutputDirs = false
+        backends = ['html5']
+    }
+    baseDirFollowsSourceFile()
+}
+
+
 group = 'com.dogfeetbirdfeet'
 version = '0.0.1-SNAPSHOT'
 
@@ -22,14 +40,17 @@ java {
 
 checkstyle {
     toolVersion = '10.17.0'  // 최신 너무 높은 버전이면 규칙 충돌 가능 → 10.12~10.17 권장
-    configFile = file("$rootDir/config/checkstyle/naver-checkstyle.xml").absoluteFile
+    configFile = file("$rootDir/rule-config/naver-checkstyle-rules.xml").absoluteFile
+    configProperties = [
+            'suppressionFile': file("$rootDir/rule-config/suppressions.xml").absolutePath
+    ]
     maxWarnings = 0
 }
 
 spotless {
     java {
 
-        eclipse().configFile("$rootDir/src/main/resources/naver-eclipse-formatter.xml")
+        eclipse().configFile("$rootDir/rule-config/naver-eclipse-formatter.xml")
 
         // ✅ Naver import 레이아웃을 반영
         importOrder("java","javax","org","net","com","", "com.nhncorp","com.navercorp","com.naver")

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.ResponseMsg;
 
 /**
  * @author nks

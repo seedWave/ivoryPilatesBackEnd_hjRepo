@@ -1,7 +1,7 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.PaidFlag;
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.PayMethod;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.PaidFlag;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.PayMethod;
 
 import lombok.Data;
 

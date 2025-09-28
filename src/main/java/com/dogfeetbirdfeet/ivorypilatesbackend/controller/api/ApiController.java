@@ -24,7 +24,8 @@ public class ApiController {
 	 * @author nks
 	 * @apiNote 공공데이터 포탈에서 공휴일 가져오기 위한 엔드포인트 메서드
 	 */
-	@GetMapping("/getHoliday") public void getHoliday() {
+	@GetMapping("/getHoliday")
+	public void getHoliday() {
 		apiService.getHolidayExplorer("2025", "10");
 	}
 
@@ -32,7 +33,8 @@ public class ApiController {
 	 * @author nks
 	 * @apiNote 2000.01.01 ~ 9999.12.31 CAL_MST 테이블 생성
 	 */
-	@GetMapping("/makeCalender") public void makeCalender() {
+	@GetMapping("/makeCalender")
+	public void makeCalender() {
 		apiService.makeCalender("20000101");
 	}
 }

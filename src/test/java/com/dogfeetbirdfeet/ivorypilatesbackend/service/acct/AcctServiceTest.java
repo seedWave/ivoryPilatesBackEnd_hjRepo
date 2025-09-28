@@ -9,8 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.docs.SnippetWriter;
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.Gender;
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.YN;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.Gender;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.YN;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.Acct;
 import com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper;
 
@@ -30,7 +30,8 @@ public class AcctServiceTest {
 	}
 
 	@Test
-	@DisplayName("GET /acct - 계정 조회 API 테스트 - 성공") void testGetAcctByIdTestSuccess() {
+	@DisplayName("GET /acct - 계정 조회 API 테스트 - 성공")
+	void testGetAcctByIdTestSuccess() {
 
 		// ✅ Arrange
 		Acct acctDto = new Acct();
@@ -86,7 +87,8 @@ public class AcctServiceTest {
 	}
 
 	@Test
-	@DisplayName("Service: getAcctById - 실패(null)") void testGetAcctById_Fail_Null() {
+	@DisplayName("Service: getAcctById - 실패(null)")
+	void testGetAcctById_Fail_Null() {
 		AcctMapper mockMapper = mock(AcctMapper.class);
 		when(mockMapper.getAcctById("B000001")).thenReturn(null);
 

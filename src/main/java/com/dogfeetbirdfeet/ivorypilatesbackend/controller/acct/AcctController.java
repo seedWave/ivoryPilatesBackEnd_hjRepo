@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonMethod.CommonMethod;
+import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonmethod.CommonMethod;
 import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.maker.ApiResponse;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.Acct;
 import com.dogfeetbirdfeet.ivorypilatesbackend.service.acct.AcctService;
@@ -31,7 +31,8 @@ public class AcctController {
 	 * @author nks
 	 * @return 모든 계정 목록
 	 */
-	@GetMapping("/getAllAccts") public ResponseEntity<List<Acct>> getAllAccts() {
+	@GetMapping("/getAllAccts")
+	public ResponseEntity<List<Acct>> getAllAccts() {
 		return ResponseEntity.ok(acctService.getAllAccts());
 	}
 
@@ -41,7 +42,8 @@ public class AcctController {
 	 * @param acctId 대상 계정 아이디
 	 * @return 계정 정보
 	 */
-	@GetMapping("/getAcctById") public ResponseEntity<Acct> getAcctById(@RequestParam String acctId) {
+	@GetMapping("/getAcctById")
+	public ResponseEntity<Acct> getAcctById(@RequestParam String acctId) {
 		return ResponseEntity.ok(acctService.getAcctById(acctId));
 	}
 
@@ -53,7 +55,8 @@ public class AcctController {
 	 * @param userId 생성하는 계정 아이디
 	 * @return 생성된 계정 정보
 	 */
-	@PostMapping("/insertAcct") public ResponseEntity<ApiResponse<Acct>> insertAcct(@RequestBody Acct acct,
+	@PostMapping("/insertAcct")
+	public ResponseEntity<ApiResponse<Acct>> insertAcct(@RequestBody Acct acct,
 		@RequestParam String userId) {
 		return commonMethod.responseTransaction(acctService.insertAcct(acct, userId));
 	}

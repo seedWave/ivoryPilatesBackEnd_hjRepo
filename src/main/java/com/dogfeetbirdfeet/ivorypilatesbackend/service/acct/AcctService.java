@@ -6,9 +6,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonMethod.CommonMethod;
+import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonmethod.CommonMethod;
 import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.maker.ServiceResult;
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.ResponseMsg;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.Acct;
 import com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper;
 
@@ -67,8 +67,10 @@ public class AcctService {
 	 */
 	public Acct postProcessingAcctTable(Acct user) {
 
-		if (null == user)
+		if (null == user) {
 			return null;
+		}
+
 		user.setBirthDate(null != user.getBirthDate() ? commonMethod.translateDate(user.getBirthDate()) : null);
 		user.setRegDtm(null != user.getRegDtm() ? commonMethod.translateDate(user.getRegDtm()) : null);
 		user.setModDtm(null != user.getModDtm() ? commonMethod.translateDate(user.getModDtm()) : null);
@@ -83,7 +85,8 @@ public class AcctService {
 	 * @param userId 생성하는 계정 ID
 	 * @return 생성된 객체 정보
 	 */
-	@Transactional(rollbackFor = Exception.class) public ServiceResult<Acct> insertAcct(Acct acct, String userId) {
+	@Transactional(rollbackFor = Exception.class)
+	public ServiceResult<Acct> insertAcct(Acct acct, String userId) {
 
 		ResponseMsg fsMsg = commonMethod.returnResultByResponseMsg(
 			acctMapper.insertAcct(acct, userId));
