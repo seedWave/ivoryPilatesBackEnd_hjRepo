@@ -25,6 +25,6 @@ public class CalMstService {
 	 * @return 대상 일자의 ID 목록
 	 */
 	public List<CalMst> findCalIdBySchedDate(@Param("schedDate") String schedDate) {
-		return calMstMapper.findCalIdBySchedDate(schedDate);
+		return calMstMapper.findCalIdBySchedDate(schedDate)  ;
 	}
 }
