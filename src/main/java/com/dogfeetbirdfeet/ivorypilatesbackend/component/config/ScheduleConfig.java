@@ -1,7 +1,5 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.component.config;
 
-import lombok.RequiredArgsConstructor;
-
 import java.time.Year;
 import java.time.ZoneId;
 
@@ -12,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.dogfeetbirdfeet.ivorypilatesbackend.service.api.ApiService;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author nks

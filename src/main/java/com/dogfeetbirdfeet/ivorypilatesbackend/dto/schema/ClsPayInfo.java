@@ -1,9 +1,9 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema;
 
-import lombok.Data;
-
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.PaidFlag;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.PayMethod;
+
+import lombok.Data;
 
 /**
  * @author nks

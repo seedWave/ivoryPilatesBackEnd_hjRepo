@@ -31,18 +31,8 @@ spotless {
 
         eclipse().configFile("$rootDir/src/main/resources/naver-eclipse-formatter.xml")
 
-        // ✅ Naver import 레이아웃을 반영(아래 순서 설명 참고)
-        importOrder(
-                "",                // 빈 패키지(자체 패키지) — XML에 빈 패키지 블록이 존재
-                "java",
-                "javax",
-                "org",
-                "net",
-                "com",
-                "com.nhncorp",
-                "com.navercorp",
-                "com.naver"
-        )
+        // ✅ Naver import 레이아웃을 반영
+        importOrder("java","javax","org","net","com","", "com.nhncorp","com.navercorp","com.naver")
         removeUnusedImports()
 
         // 대상/제외
