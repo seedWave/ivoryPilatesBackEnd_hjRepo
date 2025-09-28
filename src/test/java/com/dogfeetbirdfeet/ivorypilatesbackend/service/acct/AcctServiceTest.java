@@ -65,9 +65,9 @@ public class AcctServiceTest {
 		assertEquals("2025년 05월 27일", result.getBirthDate()); // 변환 확인
 		assertEquals(Gender.W, result.getGender());
 		assertEquals(YN.Y, result.getActiveYn());
-		assertEquals("2025년 09월 07일", result.getRegDtm());    // 변환 확인
+		assertEquals("2025년 09월 07일", result.getRegDtm()); // 변환 확인
 		assertEquals("SYS", result.getRegId());
-		assertEquals("2025년 09월 07일", result.getModDtm());    // 변환 확인
+		assertEquals("2025년 09월 07일", result.getModDtm()); // 변환 확인
 		assertEquals("SYS", result.getModId());
 
 		verify(mockMapper, times(1)).getAcctById(acctDto.getAcctId());
@@ -78,7 +78,7 @@ public class AcctServiceTest {
 		w.writeAdoc("service/acct/getAcctById/success/description.adoc",
 			"""
 				이 스니펫은 *Service 레이어*에서 `getAcctById` 성공 케이스입니다.
-				
+
 				* 입력: `acctId = A000001`
 				* 처리: Mapper → Service 후처리
 				* 결과: 계정 DTO
@@ -105,7 +105,7 @@ public class AcctServiceTest {
 		w.writeAdoc("service/acct/getAcctById/fail/description.adoc",
 			"""
 				이 스니펫은 *Service 레이어*에서 `getAcctById` 실패(null) 케이스입니다.
-				
+
 				* 입력: `acctId = B000001`
 				* 결과: `null` (컨트롤러에서 200 OK + 빈 바디로 변환하는 정책과 구분)
 				""");

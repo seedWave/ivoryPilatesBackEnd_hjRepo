@@ -28,8 +28,7 @@ public class CalRelService {
 	public ServiceResult<ResponseMsg> insertCalRel(CalRel calRel) {
 
 		ResponseMsg fsMsg = commonMethod.returnResultByResponseMsg(
-			calRelMapper.insertCalRel(calRel)
-		);
+			calRelMapper.insertCalRel(calRel));
 
 		if (!fsMsg.equals(ResponseMsg.ON_SUCCESS)) {
 			return ServiceResult.failure(fsMsg);

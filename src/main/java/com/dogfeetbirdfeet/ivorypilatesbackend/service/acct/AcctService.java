@@ -33,7 +33,8 @@ public class AcctService {
 	 * @param acctId 대상 계정 아이디
 	 * @return 계정 정보
 	 */
-	public Acct getAcctById(@Param("acctId") String acctId) {
+	public Acct getAcctById(@Param("acctId")
+	String acctId) {
 
 		return postProcessingAcctTable(acctMapper.getAcctById(acctId));
 	}
@@ -87,8 +88,7 @@ public class AcctService {
 	public ServiceResult<Acct> insertAcct(Acct acct, String userId) {
 
 		ResponseMsg fsMsg = commonMethod.returnResultByResponseMsg(
-			acctMapper.insertAcct(acct, userId)
-		);
+			acctMapper.insertAcct(acct, userId));
 
 		if (!fsMsg.equals(ResponseMsg.ON_SUCCESS)) {
 			return ServiceResult.failure(fsMsg);

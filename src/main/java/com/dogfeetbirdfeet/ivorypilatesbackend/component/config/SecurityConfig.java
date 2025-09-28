@@ -36,22 +36,18 @@ public class SecurityConfig {
 			// CORS 설정
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			// 세션을 설정하지 않도록(Stateless)
-			.sessionManagement((sessionManagement) ->
-				sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			)
+			.sessionManagement(
+				(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			// 엔드포인트별 접근 권한 설정
-			.authorizeHttpRequests(authorizeRequests ->
-				authorizeRequests
-					.requestMatchers("/auth/**").permitAll()            // 로그인, 토큰 인증 관련
-					.requestMatchers("/user/**").permitAll()            // 사용자 관련
-					.requestMatchers("/api/**").permitAll()             // API 관련
-					.requestMatchers("/favicon.ico").permitAll()        // favicon
-					.anyRequest().authenticated()
-			)
+			.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+				.requestMatchers("/auth/**").permitAll() // 로그인, 토큰 인증 관련
+				.requestMatchers("/user/**").permitAll() // 사용자 관련
+				.requestMatchers("/api/**").permitAll() // API 관련
+				.requestMatchers("/favicon.ico").permitAll() // favicon
+				.anyRequest().authenticated())
 			// 인증 실패 시 401 반환
-			.exceptionHandling(exceptionHandling ->
-				exceptionHandling.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-			);
+			.exceptionHandling(exceptionHandling -> exceptionHandling
+				.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 
 		return http.build();
 	}
@@ -64,11 +60,11 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(
-			List.of("http://localhost:3000", "https://localhost:3000"   // 로컬 환경
+			List.of("http://localhost:3000", "https://localhost:3000" // 로컬 환경
 			));
-		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));       // 허용할 HTTP 메서드
-		configuration.setAllowedHeaders(List.of("Content-Type", "Authorization"));      // 허용할 요청 헤더
-		configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie"));        // 클라이언트에서 접근 가능한 응답 헤더
+		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // 허용할 HTTP 메서드
+		configuration.setAllowedHeaders(List.of("Content-Type", "Authorization")); // 허용할 요청 헤더
+		configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie")); // 클라이언트에서 접근 가능한 응답 헤더
 		configuration.setAllowCredentials(true); // 쿠키와 인증정보 포함 허용
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -43,7 +43,8 @@ public class AcctController {
 	 * @return 계정 정보
 	 */
 	@GetMapping("/getAcctById")
-	public ResponseEntity<Acct> getAcctById(@RequestParam String acctId) {
+	public ResponseEntity<Acct> getAcctById(@RequestParam
+	String acctId) {
 		return ResponseEntity.ok(acctService.getAcctById(acctId));
 	}
 
@@ -56,7 +57,9 @@ public class AcctController {
 	 * @return 생성된 계정 정보
 	 */
 	@PostMapping("/insertAcct")
-	public ResponseEntity<ApiResponse<Acct>> insertAcct(@RequestBody Acct acct, @RequestParam String userId) {
+	public ResponseEntity<ApiResponse<Acct>> insertAcct(@RequestBody
+	Acct acct, @RequestParam
+	String userId) {
 		return commonMethod.responseTransaction(acctService.insertAcct(acct, userId));
 	}
 }

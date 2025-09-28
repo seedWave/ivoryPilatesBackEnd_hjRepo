@@ -1,8 +1,8 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.Day;
-
 import lombok.Data;
+
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.Day;
 
 /**
  * @author nks

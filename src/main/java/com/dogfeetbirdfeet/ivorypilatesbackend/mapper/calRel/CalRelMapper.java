@@ -8,5 +8,6 @@ import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.CalRel;
 @Mapper
 public interface CalRelMapper {
 
-	int insertCalRel(@Param("calRel") CalRel calRel);
+	int insertCalRel(@Param("calRel")
+	CalRel calRel);
 }

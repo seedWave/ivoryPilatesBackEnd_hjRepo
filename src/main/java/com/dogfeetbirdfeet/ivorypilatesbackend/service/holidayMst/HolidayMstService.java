@@ -44,8 +44,7 @@ public class HolidayMstService {
 		for (HolidayMstWithSchedDate holidayMst : holidayMsts) {
 
 			ResponseMsg fsMsg = commonMethod.returnResultByResponseMsg(
-				holidayMstMapper.insertHoliday(holidayMst)
-			);
+				holidayMstMapper.insertHoliday(holidayMst));
 
 			if (!(fsMsg.equals(ResponseMsg.ON_SUCCESS)) && !(fsMsg.equals(ResponseMsg.MULTI_AFFECTED))) {
 				return ServiceResult.failure(fsMsg);

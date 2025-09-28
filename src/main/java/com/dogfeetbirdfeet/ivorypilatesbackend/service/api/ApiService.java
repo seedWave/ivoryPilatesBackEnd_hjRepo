@@ -62,22 +62,21 @@ public class ApiService {
 
 		DateTimeFormatter B = DateTimeFormatter.BASIC_ISO_DATE; // yyyyMMdd
 
-		LocalDate start = LocalDate.parse(staYmd, B);            // 20000101
-		LocalDate limit = LocalDate.of(2999, 12, 31);            // 루프 상한 (필요에 맞게)
+		LocalDate start = LocalDate.parse(staYmd, B); // 20000101
+		LocalDate limit = LocalDate.of(2999, 12, 31); // 루프 상한 (필요에 맞게)
 
 		ResponseMsg fsMsg;
 
 		while (!start.isAfter(limit)) {
-			LocalDate end = start.plusYears(25).minusDays(1);    // 25년 블록: 시작~(시작+25년-1일)
+			LocalDate end = start.plusYears(25).minusDays(1); // 25년 블록: 시작~(시작+25년-1일)
 			if (end.isAfter(limit))
 				end = limit;
 
-			String s = start.format(B);  // yyyyMMdd
-			String e = end.format(B);    // yyyyMMdd
+			String s = start.format(B); // yyyyMMdd
+			String e = end.format(B); // yyyyMMdd
 
 			fsMsg = commonMethod.returnResultByResponseMsg(
-				calMstMapper.makeCalMst(s, e)
-			);
+				calMstMapper.makeCalMst(s, e));
 
 			if (!fsMsg.equals(ResponseMsg.ON_SUCCESS) && !fsMsg.equals(ResponseMsg.MULTI_AFFECTED)) {
 				API_LOG.error("makeCalMst failed: {} ~ {}, msg={}", s, e, fsMsg);
@@ -90,7 +89,7 @@ public class ApiService {
 	}
 
 	/**
-	 * 공공 데이터 포털 API 를 통해 특정 년, 특정 월의 공휴일 정보를 받아온다. 
+	 * 공공 데이터 포털 API 를 통해 특정 년, 특정 월의 공휴일 정보를 받아온다.
 	 * 요청 할 URL을 구성한다.
 	 *
 	 * @param solYear 대상 년도
@@ -123,8 +122,8 @@ public class ApiService {
 
 	/**
 	 * Connection 안정성을 위해 별도 메서드로 분리,
-	 * Request URL 통해 Connection 을 열고, 공공데이터포탈의 결과 값을 xml 형태로 받아온다. 
-	 * xml 데이터는 JSONObject 형태로 변환 후, tableInsert 메서드 호출한다. 
+	 * Request URL 통해 Connection 을 열고, 공공데이터포탈의 결과 값을 xml 형태로 받아온다.
+	 * xml 데이터는 JSONObject 형태로 변환 후, tableInsert 메서드 호출한다.
 	 *
 	 * @param requestURL 대상 경로 (공공데이터 포털)
 	 * @throws IOException 입출력 오류
@@ -167,6 +166,7 @@ public class ApiService {
 		}
 
 		responseBody = XML.toJSONObject(xmlResult.toString()).getJSONObject("response").getJSONObject("body");
+
 		tableInsert(responseBody);
 
 	}
@@ -226,4 +226,3 @@ public class ApiService {
 	}
 
 }
-

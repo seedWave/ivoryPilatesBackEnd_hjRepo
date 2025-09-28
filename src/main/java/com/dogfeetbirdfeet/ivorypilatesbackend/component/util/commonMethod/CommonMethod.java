@@ -23,12 +23,10 @@ import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg;
 @Component
 public class CommonMethod {
 
-	private static final DateTimeFormatter IN =
-		DateTimeFormatter.ofPattern("uuuuMMdd")
-			.withResolverStyle(ResolverStyle.STRICT);
+	private static final DateTimeFormatter IN = DateTimeFormatter.ofPattern("uuuuMMdd")
+		.withResolverStyle(ResolverStyle.STRICT);
 
-	private static final DateTimeFormatter OUT =
-		DateTimeFormatter.ofPattern("yyyy년 MM월 dd일", Locale.KOREAN);
+	private static final DateTimeFormatter OUT = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일", Locale.KOREAN);
 
 	private static final Logger CONTROLLER_LOG = LoggerFactory.getLogger("CONTROLLER_LOG");
 

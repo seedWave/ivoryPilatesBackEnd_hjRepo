@@ -72,15 +72,14 @@ public class AcctControllerSelectTest {
 
 		// ✅ Then
 		mockMvc.perform(get("/acct/getAcctById")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(acctDto))
-				.param("acctId", "A000001"))
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(acctDto))
+			.param("acctId", "A000001"))
 			.andExpect(status().isOk())
 			.andExpect(content().json(expectedJson))
 			.andDo(document("acct-get-by-id",
 				queryParameters(
-					parameterWithName("acctId").description("대상 계정 아이디")
-				),
+					parameterWithName("acctId").description("대상 계정 아이디")),
 				responseFields(
 					fieldWithPath("acctId").optional().type(JsonFieldType.STRING).description("계정 ID"),
 					fieldWithPath("acctPw").optional().type(JsonFieldType.STRING).description("계정 비밀번호"),
@@ -92,9 +91,7 @@ public class AcctControllerSelectTest {
 					fieldWithPath("regDtm").type(JsonFieldType.STRING).description("등록 일시"),
 					fieldWithPath("regId").type(JsonFieldType.STRING).description("등록자 ID"),
 					fieldWithPath("modDtm").type(JsonFieldType.STRING).description("수정 일시"),
-					fieldWithPath("modId").type(JsonFieldType.STRING).description("수정자 ID")
-				)
-			));
+					fieldWithPath("modId").type(JsonFieldType.STRING).description("수정자 ID"))));
 	}
 
 	@Test
@@ -110,15 +107,13 @@ public class AcctControllerSelectTest {
 
 		// ✅ Then
 		mockMvc.perform(get("/acct/getAcctById")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(acctDto))
-				.param("acctId", "B000001"))
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(acctDto))
+			.param("acctId", "B000001"))
 			.andExpect(status().isOk())
 			.andDo(document("acct-get-by-id",
 				queryParameters(
-					parameterWithName("acctId").description("대상 계정 아이디")
-				),
-				responseBody()
-			));
+					parameterWithName("acctId").description("대상 계정 아이디")),
+				responseBody()));
 	}
 }

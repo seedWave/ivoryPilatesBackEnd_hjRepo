@@ -1,5 +1,7 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.component.util.aop;
 
+import lombok.RequiredArgsConstructor;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -30,8 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * @author nks
@@ -145,7 +145,7 @@ public class QueryAOP {
 			}
 			if (paramName != null) {
 				Map<String, Object> m = new LinkedHashMap<>();
-				m.put(paramName, single);  // 예: "holi" -> DTO
+				m.put(paramName, single); // 예: "holi" -> DTO
 				m.put("param1", single);
 				m.put("value", single);
 				m.put("_parameter", single);
