@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class AcctController {
 	 * @author nks
 	 * @return 모든 계정 목록
 	 */
-	@GetMapping("/getAllAccts")
+	@GetMapping()
 	public ResponseEntity<List<Acct>> getAllAccts() {
 		return ResponseEntity.ok(acctService.getAllAccts());
 	}
@@ -42,8 +43,8 @@ public class AcctController {
 	 * @param acctId 대상 계정 아이디
 	 * @return 계정 정보
 	 */
-	@GetMapping("/getAcctById")
-	public ResponseEntity<Acct> getAcctById(@RequestParam String acctId) {
+	@GetMapping("/{acctId}")
+	public ResponseEntity<Acct> getAcctById(@PathVariable String acctId) {
 		return ResponseEntity.ok(acctService.getAcctById(acctId));
 	}
 
@@ -55,7 +56,7 @@ public class AcctController {
 	 * @param userId 생성하는 계정 아이디
 	 * @return 생성된 계정 정보
 	 */
-	@PostMapping("/insertAcct")
+	@PostMapping()
 	public ResponseEntity<ApiResponse<Acct>> insertAcct(@RequestBody Acct acct,
 		@RequestParam String userId) {
 		return commonMethod.responseTransaction(acctService.insertAcct(acct, userId));
