@@ -673,22 +673,6 @@ BEGIN
     RETURN V_RET;
 END$$
 
-
-CREATE
-    DEFINER = `ivory_admin` FUNCTION `IVORY`.`F_GET_RANDOM_GENDER`() RETURNS varchar(31) CHARSET utf8mb4
-    DETERMINISTIC
-BEGIN
-
-    DECLARE V_RET VARCHAR(1);
-    DECLARE V_GENDER VARCHAR(2) DEFAULT 'MW';
-
-    -- F_RANDN() 함수를 이용하여 M/F 중하나의 값을 선택.
-    SET V_RET = F_RANDOM_N(V_GENDER, 1);
-
--- 결과를 반환.
-    RETURN V_RET;
-END$$
-
 CREATE
     DEFINER = `ivory_admin` FUNCTION `IVORY`.`F_GET_RANDOM_INT_RANGE`(I_STA_NUM INT
 , I_END_NUM INT
@@ -701,36 +685,52 @@ BEGIN
 END$$
 
 CREATE
-    DEFINER = `ivory_admin` FUNCTION `IVORY`.`F_GET_RANDOM_NAME`() RETURNS varchar(31) CHARSET utf8mb4
-    DETERMINISTIC
+    DEFINER = `ivory_admin` FUNCTION `IVORY`.`F_GET_USER_NM`(I_USER_ID VARCHAR(20)
+, FLAG VARCHAR(1)
+) RETURNS VARCHAR(20) CHARSET utf8mb4
+    READS SQL DATA
 BEGIN
+    DECLARE V_RET VARCHAR(20);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_RET = NULL;
+    IF FLAG = 'M' THEN
+        SELECT NAME
+        INTO V_RET
+        FROM CUS_MST
+        WHERE MST_ID = I_USER_ID
+        LIMIT 1;
 
-    -- 이름이 들어가는 단어들(f_firsts)변수와 성이 들어가는 단어들(V_LASTS)변수를 정의.
-    DECLARE V_RET VARCHAR(31);
-    DECLARE V_FIRSTS VARCHAR(255) DEFAULT '이준시우서준하준도윤은우지호이안선우서아하윤아지안아윤시아서윤아린';
-    DECLARE V_LASTS VARCHAR(255) DEFAULT '김이박최정강조윤장임';
+    ELSEIF FLAG = 'C' THEN
+        SELECT NAME
+        INTO V_RET
+        FROM CUS_MST
+        WHERE MST_ID = (SELECT MST_ID
+                        FROM CUS_CONS
+                        WHERE CUS_ID = I_USER_ID
+                        LIMIT 1);
+    ELSEIF FLAG = 'W' THEN
+        SELECT NAME
+        INTO V_RET
+        FROM CUS_MST
+        WHERE MST_ID = (SELECT MST_ID
+                        FROM CUS_WDR
+                        WHERE CUST_ID = I_USER_ID
+                        LIMIT 1);
+    ELSEIF FLAG = 'R' THEN
+        SELECT NAME
+        INTO V_RET
+        FROM CUS_MST
+        WHERE MST_ID = (SELECT MST_ID
+                        FROM CUS_REG
+                        WHERE CUST_ID = I_USER_ID
+                        LIMIT 1);
 
-    -- F_RANDOM_N() 함수를 이용하여 이름(f_firsts), 성(V_LASTS)의 하나의 값을 선택.
-    -- V_RET 결과값 변수에 하나씩 뽑은 값을 concat() 함수를 통해 조합하여 이름을 생성.
-    SET V_RET = CONCAT(F_RANDOM_N(V_LASTS, 1), F_RANDOM_N(V_FIRSTS, 1), F_RANDOM_N(V_FIRSTS, 1));
+    ELSE
+        SET V_RET = NULL;
 
--- 결과를 반환.
+    END IF;
+
     RETURN V_RET;
-END$$
 
-CREATE
-    DEFINER = `ivory_admin` FUNCTION `IVORY`.`F_GET_RANDOM_YN`() RETURNS varchar(31) CHARSET utf8mb4
-    DETERMINISTIC
-BEGIN
-
-    DECLARE V_RET VARCHAR(1);
-    DECLARE V_YN VARCHAR(2) DEFAULT 'YN';
-
-    -- F_RANDN() 함수를 이용하여 Y/N 중하나의 값을 선택.
-    SET V_RET = F_RANDOM_N(V_YN, 1);
-
--- 결과를 반환.
-    RETURN V_RET;
 END$$
 
 CREATE
@@ -772,7 +772,7 @@ CREATE EVENT EV_UPDATE_CUS_REST
       , T1.REST_DTM = DATE_FORMAT(NOW(), '%Y%m%d')
       , T1.MOD_DTM  = DATE_FORMAT(NOW(), '%Y%m%d')
       , T1.MOD_ID   = 'SYS'
-    WHERE (T1.REST_YN IS NULL OR T1.REST_YN != 'Y')
+    WHERE (T1.REST_YN != 'Y')
       AND (SELECT T2.REMAIN_CNT
            FROM CLS_PASS T2
            WHERE T2.MST_ID = T1.MST_ID) = 0;
@@ -790,6 +790,26 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+
+-- ======================
+-- 상품-수강권-결제 정보 뷰
+-- ======================
+CREATE VIEW CLS_TEST AS
+SELECT T1.CLS_PASS_ID                AS CLS_PASS_ID
+     , T1.MST_ID                     AS USER_ID
+     , F_GET_USER_NM(T1.MST_ID, 'M') AS USER_NM
+     , T2.CLS_PKG_ID
+     , T2.CLS_PKG_NM
+     , T2.CLS_TYPE
+     , T2.PRICE
+     , T1.PAID_AMT
+     , T1.DISCOUNT_AMT
+FROM CLS_PASS T1
+   , CLS_PKG T2
+   , CLS_PAY_INFO T3
+;
+
 
 SELECT *
 FROM ACCT;
