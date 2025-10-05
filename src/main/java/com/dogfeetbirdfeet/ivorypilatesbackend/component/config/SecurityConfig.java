@@ -39,10 +39,12 @@ public class SecurityConfig {
 			.sessionManagement(
 				(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			// 엔드포인트별 접근 권한 설정
+			// TODO : 로그인 관련 설정 이후 permitAll 해제 (authenticated())
 			.authorizeHttpRequests(authorizeRequests -> authorizeRequests
 				.requestMatchers("/auth/**").permitAll() // 로그인, 토큰 인증 관련
 				.requestMatchers("/user/**").permitAll() // 사용자 관련
 				.requestMatchers("/api/**").permitAll() // API 관련
+				.requestMatchers("/commoncode/**").permitAll() // 공통코드 관련
 				.requestMatchers("/test/**").permitAll() // TEST
 				.requestMatchers("/favicon.ico").permitAll() // favicon
 				.anyRequest().authenticated())

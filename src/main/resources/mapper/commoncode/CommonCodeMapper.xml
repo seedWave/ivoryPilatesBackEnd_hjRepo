@@ -5,7 +5,7 @@
 
 <mapper namespace="com.dogfeetbirdfeet.ivorypilatesbackend.mapper.commoncode.CommonCodeMapper">
 
-    <select id="getAllAccts" resultType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.CodeDtl">
+    <select id="selectCommonCode" resultType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.CodeDtl">
         SELECT CODE_ID
              , DTL_NM
         FROM CODE_DTL

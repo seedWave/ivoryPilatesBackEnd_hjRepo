@@ -853,66 +853,69 @@ VALUES (5, 'PWD', '강사03', F_GET_RANDOM_CONTACT(),
 
 
 INSERT INTO CODE_MST
-VALUES ('01', 'PAY_DIV', '결제구분', '결제방법을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (1, 'PAY_DIV', '결제구분', '결제방법을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO CODE_MST
-VALUES ('02', 'SCH', '수업상태', '수업 진행 상태를 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (2, 'SCH', '수업상태', '수업 진행 상태를 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO CODE_MST
-VALUES ('03', 'PAY_MET', '결제수단', '결제 수단을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (3, 'PAY_MET', '결제수단', '결제 수단을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO CODE_MST
-VALUES ('04', 'USER', '사용자구분', '사용자 권한을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (4, 'USER', '사용자구분', '사용자 권한을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO CODE_MST
-VALUES ('05', 'Y/N', 'Y/N구분', 'Y/N을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'),
+VALUES (5, 'Y/N', 'Y/N구분', 'Y/N을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'),
         'SYS');
 INSERT INTO CODE_MST
-VALUES ('06', 'GENDER', '성별구분', '성별을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (6, 'GENDER', '성별구분', '성별을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_MST
+VALUES (7, 'CLS_TYPE', '상품타입', '상품 종류를 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 
 INSERT INTO CODE_DTL
-VALUES ('01', '01', 'PAY_DIV', 'PAY', '결제', '정상적으로 결제가 진행 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (1, 1, 'PAY_DIV', 'PAY', '결제', '정상적으로 결제가 진행 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO CODE_DTL
-VALUES ('02', '01', 'PAY_DIV', 'DIS', '할인', '할인된 금액으로 결제가 진행 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (2, 1, 'PAY_DIV', 'DIS', '할인', '할인된 금액으로 결제가 진행 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO CODE_DTL
-VALUES ('03', '01', 'PAY_DIV', 'REF', '환불', '결제된 금액이 환불 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
-        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
-
-INSERT INTO CODE_DTL
-VALUES ('04', '02', 'SCH', 'SCH', '예정', '수업이 아직 진행되지 않고 예정된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
-        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
-INSERT INTO CODE_DTL
-VALUES ('05', '02', 'SCH', 'COM', '완료', '수업이 정상적으로 완료 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
-        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
-INSERT INTO CODE_DTL
-VALUES ('06', '02', 'SCH', 'NOS', '노쇼', '수업 일자가 지났으나 수업이 진행되지 않은 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (3, 1, 'PAY_DIV', 'REF', '환불', '결제된 금액이 환불 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 
 INSERT INTO CODE_DTL
-VALUES ('07', '03', 'PAY_MET', 'CARD', '카드', '카드로 결제가 진행 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (4, 2, 'SCH', 'SCH', '예정', '수업이 아직 진행되지 않고 예정된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO CODE_DTL
-VALUES ('08', '03', 'PAY_MET', 'CASH', '계좌이체', '현금으로 결제가 진행 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
-        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
-
-INSERT INTO CODE_DTL
-VALUES ('09', '04', 'USER', 'ADMIN', '관리자', '관리자 권한을 가지고 있는 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (5, 2, 'SCH', 'COM', '완료', '수업이 정상적으로 완료 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO CODE_DTL
-VALUES ('10', '04', 'USER', 'USER', '사용자', '사용자 권한을 가지고 있는 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
-        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
-INSERT INTO CODE_DTL
-VALUES ('11', '04', 'USER', 'TRAINER', '강사', '강사 권한을 가지고 있는 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+VALUES (6, 2, 'SCH', 'NOS', '노쇼', '수업 일자가 지났으나 수업이 진행되지 않은 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 
 INSERT INTO CODE_DTL
-VALUES ('12', '05', 'Y/N', 'Y', 'Y', 'YN 중 Y', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'),
+VALUES (7, 3, 'PAY_MET', 'CARD', '카드', '카드로 결제가 진행 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_DTL
+VALUES (8, 3, 'PAY_MET', 'CASH', '계좌이체', '현금으로 결제가 진행 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+
+INSERT INTO CODE_DTL
+VALUES (9, 4, 'USER', 'ADMIN', '관리자', '관리자 권한을 가지고 있는 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_DTL
+VALUES (10, 4, 'USER', 'USER', '사용자', '사용자 권한을 가지고 있는 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_DTL
+VALUES (11, 4, 'USER', 'TRAINER', '강사', '강사 권한을 가지고 있는 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+
+INSERT INTO CODE_DTL
+VALUES (12, 5, 'Y/N', 'Y', 'Y', 'YN 중 Y', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'),
         'SYS');
 INSERT INTO CODE_DTL
-VALUES ('13', '05', 'Y/N', 'N', 'N', 'YN 중 N', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'),
+VALUES (13, 5, 'Y/N', 'N', 'N', 'YN 중 N', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'),
         'SYS');
 
 INSERT INTO CODE_DTL
@@ -920,6 +923,13 @@ VALUES ('14', '06', 'GENDER', 'M', '남자', '성별 중 남성', 'Y', DATE_FORM
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO CODE_DTL
 VALUES ('15', '06', 'GENDER', 'W', '여자', '성별 중 여성', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+        
+INSERT INTO CODE_DTL
+VALUES ('16', '07', 'CLS_TYPE', 'IOI', '1:1 수업', '수강생과 강사가 1 : 1인 수업', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_DTL
+VALUES ('17', '07', 'CLS_TYPE', 'TIO', '2:1 수업', '수강생과 강사가 2 : 1인 수업', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 
 

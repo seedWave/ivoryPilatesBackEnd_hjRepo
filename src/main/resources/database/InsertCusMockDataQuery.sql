@@ -1,20 +1,5 @@
 use ivory;
 
-SELECT *
-FROM CUS_MST; -- 고객 마스터
-
-SELECT *
-FROM CUS_CONS; -- 상담 고객
-
-SELECT *
-FROM CUS_GRP; -- 그룹 고객
-
-SELECT *
-FROM CUS_REG; -- 등록 고객
-
-SELECT *
-FROM CUS_WDR; -- 탈퇴 고객
-
 INSERT INTO CUS_MST
 (NAME, CONTACT, GENDER, BIRTH_DATE, BLACK_YN, REMARK, REG_DTM, REG_ID, MOD_DTM, MOD_ID)
 VALUES ('백준훈', '010-8098-1786', 'M', '19930609', 'N', '메모', DATE_FORMAT(NOW(), '%Y%m%d'), 'admin',

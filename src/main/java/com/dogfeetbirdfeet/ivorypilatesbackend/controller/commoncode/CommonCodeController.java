@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.CodeDtl;
 import com.dogfeetbirdfeet.ivorypilatesbackend.service.commoncode.CommonCodeService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author nks
  * 공통코드 조회를 위한 Controller
  */
+@Slf4j
 @RestController
 @RequestMapping("/commoncode")
 public class CommonCodeController {
@@ -34,6 +37,8 @@ public class CommonCodeController {
 	 */
 	@GetMapping("/{codeMstId}")
 	public ResponseEntity<List<CodeDtl>> getAllCommonCode(@PathVariable int codeMstId) {
+
+		log.info("RESULT : {}", commonCodeService.selectCommonCode(codeMstId).getFirst());
 		return ResponseEntity.ok(commonCodeService.selectCommonCode(codeMstId));
 	}
 }
