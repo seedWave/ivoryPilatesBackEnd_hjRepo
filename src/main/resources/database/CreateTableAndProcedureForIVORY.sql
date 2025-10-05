@@ -64,7 +64,7 @@ CREATE TABLE `ACCT`
 -- ======================
 CREATE TABLE `CUS_MST`
 (
-    `MST_ID`     VARCHAR(20)    NOT NULL COMMENT '마스터고객 아이디',
+    `MST_ID`     BIGINT         NOT NULL COMMENT '마스터고객 아이디' AUTO_INCREMENT,
     `NAME`       VARCHAR(50)    NOT NULL COMMENT '이름',
     `CONTACT`    VARCHAR(13)    NOT NULL COMMENT '연락처',
     `GENDER`     ENUM ('M','W') NOT NULL COMMENT '성별',
@@ -86,7 +86,7 @@ CREATE TABLE `CUS_MST`
 CREATE TABLE `CUS_CONS`
 (
     `CUS_ID`         VARCHAR(20) NOT NULL COMMENT '아이디',
-    `MST_ID`         VARCHAR(20) NOT NULL COMMENT '마스터고객 아이디',
+    `MST_ID`         BIGINT      NOT NULL COMMENT '마스터고객 아이디',
     `HEIGHT`         FLOAT       NOT NULL COMMENT '키',
     `WEIGHT`         FLOAT       NOT NULL COMMENT '몸무게',
     `DISEASE`        VARCHAR(4000) DEFAULT NULL COMMENT '지병',
@@ -115,7 +115,7 @@ CREATE TABLE `SCHED_MST`
 (
     `SCHED_ID`     BIGINT                   NOT NULL COMMENT '스케쥴 시퀸스' AUTO_INCREMENT,
     `ACCT_ID`      VARCHAR(20)              NOT NULL COMMENT '강사 아이디',
-    `MST_ID`       VARCHAR(20)              NOT NULL COMMENT '마스터고객 아이디',
+    `MST_ID`       BIGINT                   NOT NULL COMMENT '마스터고객 아이디',
     `TRAINER_NM`   VARCHAR(50)                       DEFAULT NULL COMMENT '깅시먕',
     `CUS_NM`       VARCHAR(50)                       DEFAULT NULL COMMENT '고객명',
     `CLS_STATUS`   ENUM ('SCH','COM','NOS') NOT NULL COMMENT '수업상태',
@@ -216,7 +216,7 @@ CREATE TABLE `OFF_DAY_MST`
 CREATE TABLE `SCHED_FX`
 (
     `FX_SCHED_ID` BIGINT                             NOT NULL COMMENT '고정 스케줄 시퀀스' AUTO_INCREMENT,
-    `MST_ID`      VARCHAR(20)                        NOT NULL COMMENT '마스터 고객 아이디',
+    `MST_ID`      BIGINT                             NOT NULL COMMENT '마스터 고객 아이디',
     `ACCT_ID`     VARCHAR(20)                        NOT NULL COMMENT '강사 아이디',
     `FX_DAY`      ENUM ('1','2','3','4','5','6','7') NOT NULL COMMENT '요일(1:월~7:일)',
     `FX_TIME`     VARCHAR(4)                         NOT NULL COMMENT '시간',
@@ -315,7 +315,7 @@ CREATE TABLE `SCHED_HIST`
     `SCHED_HIST_ID` BIGINT         NOT NULL COMMENT '스케줄 히스토리 시퀸스' AUTO_INCREMENT,
     `SCHED_ID`      BIGINT         NOT NULL COMMENT '스케쥴 아이디',
     `ACCT_ID`       VARCHAR(20)    NOT NULL COMMENT '강사 아이디',
-    `MST_ID`        VARCHAR(20)    NOT NULL COMMENT '마스터 고객 아이디',
+    `MST_ID`        BIGINT         NOT NULL COMMENT '마스터 고객 아이디',
     `CLS_DONE_YN`   ENUM ('Y','N') NOT NULL DEFAULT 'N' COMMENT '수업 완료 여부',
     `MOD_CNT`       VARCHAR(300)            DEFAULT NULL COMMENT '수정 내용',
     `REG_DTM`       VARCHAR(14)    NOT NULL COMMENT '등록일시',
@@ -348,7 +348,7 @@ CREATE TABLE `CLS_PASS`
 (
     `CLS_PASS_ID`  BIGINT               NOT NULL COMMENT '결제 수강권 아이디' AUTO_INCREMENT,
     `CLS_PKG_ID`   BIGINT               NOT NULL COMMENT '회차상품 아이디',
-    `MST_ID`       VARCHAR(20)          NOT NULL COMMENT '마스터 고객 아이디',
+    `MST_ID`       BIGINT               NOT NULL COMMENT '마스터 고객 아이디',
     `GRP_CUS_ID`   BIGINT               NOT NULL COMMENT '그룹 고객 관계 아이디',
     `DISCOUNT_AMT` INT                           DEFAULT NULL COMMENT '할인 금액',
     `PAID_AMT`     INT                  NOT NULL COMMENT '최종 결제 금액',
@@ -393,7 +393,7 @@ CREATE TABLE `CLS_PASS`
 CREATE TABLE `CUS_WDR`
 (
     `CUST_ID`        VARCHAR(20)    NOT NULL COMMENT '아이디',
-    `MST_ID`         VARCHAR(20)    NOT NULL COMMENT '마스터 고객 아이디',
+    `MST_ID`         BIGINT         NOT NULL COMMENT '마스터 고객 아이디',
     `ACCT_ID`        VARCHAR(20)    NOT NULL COMMENT '담당 강사 아이디',
     `GRP_CUS_ID`     BIGINT                  DEFAULT NULL COMMENT '그룹 고객 관계 아이디',
     `CLS_PASS_ID`    BIGINT         NOT NULL COMMENT '결제 수강권 아이디',
@@ -457,7 +457,7 @@ CREATE TABLE `ROLES`
 CREATE TABLE `CUS_REG`
 (
     `CUST_ID`        VARCHAR(20)    NOT NULL COMMENT '고객 아이디',
-    `MST_ID`         VARCHAR(20)    NOT NULL COMMENT '마스터 고객 아이디',
+    `MST_ID`         BIGINT         NOT NULL COMMENT '마스터 고객 아이디',
     `ACCT_ID`        VARCHAR(20)    NOT NULL COMMENT '담당 강사 아이디',
     `GRP_CUS_ID`     BIGINT                  DEFAULT NULL COMMENT '그룹 고객 아이디',
     `CLS_PASS_ID`    BIGINT         NOT NULL COMMENT '결제 수강권 아이디',
@@ -693,7 +693,8 @@ BEGIN
         SELECT NAME
         INTO V_RET
         FROM CUS_MST
-        WHERE MST_ID = I_USER_ID
+        WHERE I_USER_ID REGEXP '^[0-9]+$'
+          AND MST_ID = CAST(I_USER_ID AS UNSIGNED)
         LIMIT 1;
 
     ELSEIF FLAG = 'C' THEN

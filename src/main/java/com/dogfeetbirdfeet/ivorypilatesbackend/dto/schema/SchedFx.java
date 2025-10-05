@@ -12,7 +12,7 @@ import lombok.Data;
 public class SchedFx {
 
 	private Long fxSchedId;
-	private String mstId;
+	private Long mstId;
 	private String acctId;
 	private Day fxDay;
 	private String fxTime;

@@ -14,7 +14,7 @@ public class SchedMst {
 
 	private Long schedId;
 	private String acctId;
-	private String mstId;
+	private Long mstId;
 	private String trainerNm;
 	private String cusNm;
 	private ClsStatus clsStatus;

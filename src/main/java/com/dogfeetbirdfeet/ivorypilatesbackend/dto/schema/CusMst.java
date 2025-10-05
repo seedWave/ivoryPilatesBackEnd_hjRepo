@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class CusMst {
 
-	private String mstId;
+	private Long mstId;
 	private String name;
 	private String contact;
 	private Gender gender;

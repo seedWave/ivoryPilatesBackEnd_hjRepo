@@ -12,7 +12,7 @@ import lombok.Data;
 public class CusReg {
 
 	private String custId;
-	private String mstId;
+	private Long mstId;
 	private String acctId;
 	private Long grpCusId;
 	private Long clsPassId;

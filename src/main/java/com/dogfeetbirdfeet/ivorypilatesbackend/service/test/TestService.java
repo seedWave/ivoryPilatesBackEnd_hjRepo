@@ -51,9 +51,6 @@ public class TestService {
 		str = str.replaceAll("_+", "_")
 			.replaceAll("^_+|_+$", "");
 
-		System.out.println(str);
-
-		System.out.println(str.toUpperCase(Locale.ROOT));
 		return str.toUpperCase(Locale.ROOT);
 
 	}

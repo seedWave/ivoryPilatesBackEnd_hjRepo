@@ -43,6 +43,7 @@ public class SecurityConfig {
 				.requestMatchers("/auth/**").permitAll() // 로그인, 토큰 인증 관련
 				.requestMatchers("/user/**").permitAll() // 사용자 관련
 				.requestMatchers("/api/**").permitAll() // API 관련
+				.requestMatchers("/test/**").permitAll() // TEST
 				.requestMatchers("/favicon.ico").permitAll() // favicon
 				.anyRequest().authenticated())
 			// 인증 실패 시 401 반환
@@ -60,7 +61,7 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(
-			List.of("http://localhost:3000", "https://localhost:3000" // 로컬 환경
+			List.of("http://localhost:5173", "https://localhost:5173" // 로컬 환경
 			));
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // 허용할 HTTP 메서드
 		configuration.setAllowedHeaders(List.of("Content-Type", "Authorization")); // 허용할 요청 헤더
