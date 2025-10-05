@@ -109,7 +109,7 @@ public class AcctControllerSelectTest {
 		mockMvc.perform(get("/acct/getAcctById")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(acctDto))
-			.param("acctId", "B000001"))
+			.param("acctId", String.valueOf(555L)))
 			.andExpect(status().isOk())
 			.andDo(document("acct-get-by-id",
 				queryParameters(

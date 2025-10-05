@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dogfeetbirdfeet.ivorypilatesbackend.mapper.commoncode.CommonCodeMapper">
+
+    <select id="getAllAccts" resultType="com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.CodeDtl">
+        SELECT CODE_ID
+             , DTL_NM
+        FROM CODE_DTL
+        WHERE CODE_MST_ID = #{codeMstId}
+        ORDER BY CODE_ID
+
+    </select>
+</mapper>

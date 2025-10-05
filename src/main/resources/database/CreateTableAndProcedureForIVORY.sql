@@ -798,12 +798,19 @@ SELECT T1.CLS_PKG_ID
 	 , T2.CLS_PASS_ID                
      , T2.MST_ID                     AS USER_ID
      , F_GET_USER_NM(T2.MST_ID, 'M') AS USER_NM
-     , T1.CLS_PKG_ID
      , T1.CLS_PKG_NM
      , T1.CLS_TYPE
      , T1.PRICE
      , T2.PAID_AMT
-     , T2.DISCOUNT_AMT
+     , T1.DISCOUNT_AMT
+     , T2.DISCOUNT_AMT 				 AS DISCOUNT_AMT2
+     , T2.TOTAL_CNT
+     , T2.REMAIN_CNT
+     , T1.EXP_RATE
+     , T2.PAY_METHOD
+     , T2.PAY_DATE
+     , T2.REFUND_YN
+     , T1.USE_YN
 FROM CLS_PKG T1
 JOIN CLS_PASS T2
   ON T1.CLS_PKG_ID = T2.CLS_PKG_ID
