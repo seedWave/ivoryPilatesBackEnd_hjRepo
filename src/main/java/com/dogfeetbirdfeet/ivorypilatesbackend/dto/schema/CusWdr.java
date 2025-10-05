@@ -13,7 +13,7 @@ public class CusWdr {
 
 	private String custId;
 	private Long mstId;
-	private String acctId;
+	private Long acctId;
 	private Long grpCusId;
 	private Long clsPassId;
 	private Float height;

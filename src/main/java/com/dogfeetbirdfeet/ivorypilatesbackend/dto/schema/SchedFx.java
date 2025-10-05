@@ -13,7 +13,7 @@ public class SchedFx {
 
 	private Long fxSchedId;
 	private Long mstId;
-	private String acctId;
+	private Long acctId;
 	private Day fxDay;
 	private String fxTime;
 	private String regDtm;

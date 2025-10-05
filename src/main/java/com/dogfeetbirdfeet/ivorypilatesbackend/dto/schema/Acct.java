@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class Acct {
 
-	private String acctId;
+	private Long acctId;
 	private String acctPw;
 	private String name;
 	private String contact;

@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class AcctRole {
 
-	private String acctId;
+	private Long acctId;
 	private Long roleId;
 	private String regDtm;
 	private String regId;

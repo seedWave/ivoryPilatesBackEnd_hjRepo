@@ -13,7 +13,7 @@ import lombok.Data;
 public class SchedMst {
 
 	private Long schedId;
-	private String acctId;
+	private Long acctId;
 	private Long mstId;
 	private String trainerNm;
 	private String cusNm;

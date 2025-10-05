@@ -10,7 +10,7 @@ import lombok.Data;
 public class Career {
 
 	private Long careerId;
-	private String acctId;
+	private Long acctId;
 	private String careerNm;
 	private String careerOrg;
 	private String careerMemo;

@@ -44,7 +44,7 @@ public class AcctController {
 	 * @return 계정 정보
 	 */
 	@GetMapping("/{acctId}")
-	public ResponseEntity<Acct> getAcctById(@PathVariable String acctId) {
+	public ResponseEntity<Acct> getAcctById(@PathVariable Long acctId) {
 		return ResponseEntity.ok(acctService.getAcctById(acctId));
 	}
 

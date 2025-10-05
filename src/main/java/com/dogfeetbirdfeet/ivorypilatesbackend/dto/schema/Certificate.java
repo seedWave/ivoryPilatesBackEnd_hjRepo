@@ -10,7 +10,7 @@ import lombok.Data;
 public class Certificate {
 
 	private Long certId;
-	private String acctId;
+	private Long acctId;
 	private String certName;
 	private String certIssueDate;
 	private String certExpDate;

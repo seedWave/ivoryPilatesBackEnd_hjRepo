@@ -44,7 +44,7 @@ DROP VIEW IF EXISTS `CLS_VIEW`;
 -- ======================
 CREATE TABLE `ACCT`
 (
-    `ACCT_ID`    VARCHAR(20)    NOT NULL COMMENT '계정 아이디',
+    `ACCT_ID`    BIGINT         NOT NULL COMMENT '계정 아이디',
     `ACCT_PW`    VARCHAR(100)   NOT NULL COMMENT '계정 비밀번호',
     `NAME`       VARCHAR(50)    NOT NULL COMMENT '이름',
     `CONTACT`    VARCHAR(13)    NOT NULL COMMENT '연락처',
@@ -86,7 +86,7 @@ CREATE TABLE `CUS_MST`
 CREATE TABLE `CUS_CONS`
 (
     `CUS_ID`         VARCHAR(20) NOT NULL COMMENT '아이디',
-    `MST_ID`         BIGINT      NOT NULL COMMENT '마스터고객 아이디',
+    `MST_ID`         BIGINT        DEFAULT NULL COMMENT '마스터고객 아이디',
     `HEIGHT`         FLOAT       NOT NULL COMMENT '키',
     `WEIGHT`         FLOAT       NOT NULL COMMENT '몸무게',
     `DISEASE`        VARCHAR(4000) DEFAULT NULL COMMENT '지병',
@@ -114,7 +114,7 @@ CREATE TABLE `CUS_CONS`
 CREATE TABLE `SCHED_MST`
 (
     `SCHED_ID`     BIGINT                   NOT NULL COMMENT '스케쥴 시퀸스' AUTO_INCREMENT,
-    `ACCT_ID`      VARCHAR(20)              NOT NULL COMMENT '강사 아이디',
+    `ACCT_ID`      BIGINT                   NOT NULL COMMENT '강사 아이디',
     `MST_ID`       BIGINT                   NOT NULL COMMENT '마스터고객 아이디',
     `TRAINER_NM`   VARCHAR(50)                       DEFAULT NULL COMMENT '깅시먕',
     `CUS_NM`       VARCHAR(50)                       DEFAULT NULL COMMENT '고객명',
@@ -193,7 +193,7 @@ CREATE TABLE `HOLIDAY_MST`
 CREATE TABLE `OFF_DAY_MST`
 (
     `OFF_ID`     BIGINT         NOT NULL COMMENT '휴무일 아이디' AUTO_INCREMENT,
-    `ACCT_ID`    VARCHAR(20)    NOT NULL COMMENT '강사 아이디',
+    `ACCT_ID`    BIGINT         NOT NULL COMMENT '강사 아이디',
     `TRAINER_NM` VARCHAR(50)             DEFAULT NULL COMMENT '강사명',
     `REST_YN`    ENUM ('Y','N') NOT NULL DEFAULT 'Y' COMMENT '강의여부',
     `REG_DTM`    VARCHAR(14)    NOT NULL COMMENT '등록일시',
@@ -217,7 +217,7 @@ CREATE TABLE `SCHED_FX`
 (
     `FX_SCHED_ID` BIGINT                             NOT NULL COMMENT '고정 스케줄 시퀀스' AUTO_INCREMENT,
     `MST_ID`      BIGINT                             NOT NULL COMMENT '마스터 고객 아이디',
-    `ACCT_ID`     VARCHAR(20)                        NOT NULL COMMENT '강사 아이디',
+    `ACCT_ID`     BIGINT                             NOT NULL COMMENT '강사 아이디',
     `FX_DAY`      ENUM ('1','2','3','4','5','6','7') NOT NULL COMMENT '요일(1:월~7:일)',
     `FX_TIME`     VARCHAR(4)                         NOT NULL COMMENT '시간',
     `REG_DTM`     VARCHAR(14)                        NOT NULL COMMENT '등록일시',
@@ -245,7 +245,7 @@ CREATE TABLE `SCHED_FX`
 CREATE TABLE `CAREER`
 (
     `CAREER_ID`     BIGINT      NOT NULL COMMENT '경력 아이디' AUTO_INCREMENT,
-    `ACCT_ID`       VARCHAR(20) NOT NULL COMMENT '강사 아이디',
+    `ACCT_ID`       BIGINT      NOT NULL COMMENT '강사 아이디',
     `CAREER_NM`     VARCHAR(50) NOT NULL COMMENT '경력 이름',
     `CAREER_ORG`    VARCHAR(50)   DEFAULT NULL COMMENT '경력 기관',
     `CAREER_MEMO`   VARCHAR(1000) DEFAULT NULL COMMENT '경력 상세',
@@ -271,7 +271,7 @@ CREATE TABLE `CAREER`
 CREATE TABLE `CERTIFICATE`
 (
     `CERT_ID`         BIGINT      NOT NULL COMMENT '자격증 식별번호' AUTO_INCREMENT,
-    `ACCT_ID`         VARCHAR(20) NOT NULL COMMENT '계정 아이디',
+    `ACCT_ID`         BIGINT      NOT NULL COMMENT '계정 아이디',
     `CERT_NAME`       VARCHAR(50) NOT NULL COMMENT '자격증 이름',
     `CERT_ISSUE_DATE` VARCHAR(14) NOT NULL COMMENT '자격증 발급일자',
     `CERT_EXP_DATE`   VARCHAR(14) DEFAULT NULL COMMENT '자격증 만료일자',
@@ -295,10 +295,10 @@ CREATE TABLE `CERTIFICATE`
 CREATE TABLE `CUS_GRP`
 (
     `GRP_CUS_ID` BIGINT      NOT NULL COMMENT '그룹 고객 관계 아이디' AUTO_INCREMENT,
-    `CUS_ID_1`   VARCHAR(20) DEFAULT NULL COMMENT '아이디1',
-    `CUS_ID_2`   VARCHAR(20) DEFAULT NULL COMMENT '아이디2',
-    `CUS_ID_3`   VARCHAR(20) DEFAULT NULL COMMENT '아이디3',
-    `CUS_ID_4`   VARCHAR(20) DEFAULT NULL COMMENT '아이디4',
+    `CUS_ID_1`   BIGINT      DEFAULT NULL COMMENT '아이디1',
+    `CUS_ID_2`   BIGINT      DEFAULT NULL COMMENT '아이디2',
+    `CUS_ID_3`   BIGINT      DEFAULT NULL COMMENT '아이디3',
+    `CUS_ID_4`   BIGINT      DEFAULT NULL COMMENT '아이디4',
     `REG_DTM`    VARCHAR(14) NOT NULL COMMENT '등록일시',
     `REG_ID`     VARCHAR(20) NOT NULL COMMENT '등록계정 아이디',
     `MOD_DTM`    VARCHAR(14) DEFAULT NULL COMMENT '수정일시',
@@ -314,7 +314,7 @@ CREATE TABLE `SCHED_HIST`
 (
     `SCHED_HIST_ID` BIGINT         NOT NULL COMMENT '스케줄 히스토리 시퀸스' AUTO_INCREMENT,
     `SCHED_ID`      BIGINT         NOT NULL COMMENT '스케쥴 아이디',
-    `ACCT_ID`       VARCHAR(20)    NOT NULL COMMENT '강사 아이디',
+    `ACCT_ID`       BIGINT         NOT NULL COMMENT '강사 아이디',
     `MST_ID`        BIGINT         NOT NULL COMMENT '마스터 고객 아이디',
     `CLS_DONE_YN`   ENUM ('Y','N') NOT NULL DEFAULT 'N' COMMENT '수업 완료 여부',
     `MOD_CNT`       VARCHAR(300)            DEFAULT NULL COMMENT '수정 내용',
@@ -349,7 +349,7 @@ CREATE TABLE `CLS_PASS`
     `CLS_PASS_ID`  BIGINT               NOT NULL COMMENT '결제 수강권 아이디' AUTO_INCREMENT,
     `CLS_PKG_ID`   BIGINT               NOT NULL COMMENT '회차상품 아이디',
     `MST_ID`       BIGINT               NOT NULL COMMENT '마스터 고객 아이디',
-    `GRP_CUS_ID`   BIGINT               NOT NULL COMMENT '그룹 고객 관계 아이디',
+    `GRP_CUS_ID`   BIGINT                        DEFAULT NULL COMMENT '그룹 고객 관계 아이디',
     `DISCOUNT_AMT` INT                           DEFAULT NULL COMMENT '할인 금액',
     `PAID_AMT`     INT                  NOT NULL COMMENT '최종 결제 금액',
     `PAY_DATE`     VARCHAR(14)          NOT NULL COMMENT '결제일자',
@@ -394,7 +394,7 @@ CREATE TABLE `CUS_WDR`
 (
     `CUST_ID`        VARCHAR(20)    NOT NULL COMMENT '아이디',
     `MST_ID`         BIGINT         NOT NULL COMMENT '마스터 고객 아이디',
-    `ACCT_ID`        VARCHAR(20)    NOT NULL COMMENT '담당 강사 아이디',
+    `ACCT_ID`        BIGINT         NOT NULL COMMENT '담당 강사 아이디',
     `GRP_CUS_ID`     BIGINT                  DEFAULT NULL COMMENT '그룹 고객 관계 아이디',
     `CLS_PASS_ID`    BIGINT         NOT NULL COMMENT '결제 수강권 아이디',
     `HEIGHT`         FLOAT          NOT NULL COMMENT '키',
@@ -458,9 +458,9 @@ CREATE TABLE `CUS_REG`
 (
     `CUST_ID`        VARCHAR(20)    NOT NULL COMMENT '고객 아이디',
     `MST_ID`         BIGINT         NOT NULL COMMENT '마스터 고객 아이디',
-    `ACCT_ID`        VARCHAR(20)    NOT NULL COMMENT '담당 강사 아이디',
+    `ACCT_ID`        BIGINT         NOT NULL COMMENT '담당 강사 아이디',
     `GRP_CUS_ID`     BIGINT                  DEFAULT NULL COMMENT '그룹 고객 아이디',
-    `CLS_PASS_ID`    BIGINT         NOT NULL COMMENT '결제 수강권 아이디',
+    `CLS_PKG_ID`     BIGINT         NOT NULL COMMENT '결제 수강권 아이디',
     `HEIGHT`         FLOAT          NOT NULL COMMENT '키',
     `WEIGHT`         FLOAT          NOT NULL COMMENT '몸무게',
     `DISEASE`        VARCHAR(4000)           DEFAULT NULL COMMENT '지병',
@@ -494,9 +494,9 @@ CREATE TABLE `CUS_REG`
             REFERENCES `CUS_GRP` (`GRP_CUS_ID`)
             ON UPDATE CASCADE
             ON DELETE CASCADE,
-    CONSTRAINT `FK_CLS_PASS_TO_CUS_REG`
-        FOREIGN KEY (`CLS_PASS_ID`)
-            REFERENCES `CLS_PASS` (`CLS_PASS_ID`)
+    CONSTRAINT `FK_CLS_PKG_TO_CUS_REG`
+        FOREIGN KEY (`CLS_PKG_ID`)
+            REFERENCES `CLS_PKG` (`CLS_PKG_ID`)
             ON UPDATE CASCADE
             ON DELETE CASCADE
 )
@@ -577,7 +577,7 @@ CREATE TABLE `CLS_PAY_INFO`
 -- ======================
 CREATE TABLE `ACCT_ROLE`
 (
-    `ACCT_ID` VARCHAR(20) NOT NULL COMMENT '계정 아이디',
+    `ACCT_ID` BIGINT      NOT NULL COMMENT '계정 아이디',
     `ROLE_ID` BIGINT      NOT NULL COMMENT '권한식별번호' AUTO_INCREMENT,
     `REG_DTM` VARCHAR(14) NOT NULL COMMENT '등록일시',
     `REG_ID`  VARCHAR(20) NOT NULL COMMENT '등록계정 아이디',
@@ -794,18 +794,19 @@ DELIMITER ;
 -- 상품-수강권-결제 정보 뷰
 -- ======================
 CREATE VIEW CLS_VIEW AS
-SELECT T1.CLS_PASS_ID                AS CLS_PASS_ID
-     , T1.MST_ID                     AS USER_ID
-     , F_GET_USER_NM(T1.MST_ID, 'M') AS USER_NM
-     , T2.CLS_PKG_ID
-     , T2.CLS_PKG_NM
-     , T2.CLS_TYPE
-     , T2.PRICE
-     , T1.PAID_AMT
-     , T1.DISCOUNT_AMT
-FROM CLS_PASS T1
-   , CLS_PKG T2
-   , CLS_PAY_INFO T3
+SELECT T1.CLS_PKG_ID
+	 , T2.CLS_PASS_ID                
+     , T2.MST_ID                     AS USER_ID
+     , F_GET_USER_NM(T2.MST_ID, 'M') AS USER_NM
+     , T1.CLS_PKG_ID
+     , T1.CLS_PKG_NM
+     , T1.CLS_TYPE
+     , T1.PRICE
+     , T2.PAID_AMT
+     , T2.DISCOUNT_AMT
+FROM CLS_PKG T1
+JOIN CLS_PASS T2
+  ON T1.CLS_PKG_ID = T2.CLS_PKG_ID
 ;
 
 
@@ -823,23 +824,23 @@ VALUES ('04', 'TIME_TRAINER', '시간 강사', DATE_FORMAT(NOW(), '%Y%m%d'), 'SY
 
 
 INSERT INTO ACCT
-VALUES ('A000001', 'PWD', '관리자01', F_GET_RANDOM_CONTACT(),
+VALUES (1, 'PWD', '관리자01', F_GET_RANDOM_CONTACT(),
         DATE_FORMAT(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 20000) DAY), '%Y%m%d'), 'W', 'Y',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO ACCT
-VALUES ('A000002', 'PWD', '관리자02', F_GET_RANDOM_CONTACT(),
+VALUES (2, 'PWD', '관리자02', F_GET_RANDOM_CONTACT(),
         DATE_FORMAT(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 20000) DAY), '%Y%m%d'), 'M', 'Y',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO ACCT
-VALUES ('A000003', 'PWD', '강사01', F_GET_RANDOM_CONTACT(),
+VALUES (3, 'PWD', '강사01', F_GET_RANDOM_CONTACT(),
         DATE_FORMAT(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 20000) DAY), '%Y%m%d'), 'W', 'Y',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO ACCT
-VALUES ('A000004', 'PWD', '강사02', F_GET_RANDOM_CONTACT(),
+VALUES (4, 'PWD', '강사02', F_GET_RANDOM_CONTACT(),
         DATE_FORMAT(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 20000) DAY), '%Y%m%d'), 'W', 'Y',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 INSERT INTO ACCT
-VALUES ('A000005', 'PWD', '강사03', F_GET_RANDOM_CONTACT(),
+VALUES (5, 'PWD', '강사03', F_GET_RANDOM_CONTACT(),
         DATE_FORMAT(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 20000) DAY), '%Y%m%d'), 'M', 'Y',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 

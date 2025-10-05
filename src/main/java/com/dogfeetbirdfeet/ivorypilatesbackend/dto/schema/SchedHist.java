@@ -13,7 +13,7 @@ public class SchedHist {
 
 	private Long schedHistId;
 	private Long schedId;
-	private String acctId;
+	private Long acctId;
 	private Long mstId;
 	private YN clsDoneYn;
 	private String modCnt;
