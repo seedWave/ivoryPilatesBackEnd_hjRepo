@@ -34,6 +34,8 @@ DROP FUNCTION IF EXISTS F_GET_USER_NM;
 DROP EVENT IF EXISTS EV_UPDATE_CUS_REST;
 
 DROP VIEW IF EXISTS `CLS_VIEW`;
+DROP VIEW IF EXISTS `CAL_HOLI_VIEW`;
+DROP VIEW IF EXISTS `CAL_SCH_VIEW`;
 
 -- ========================================================================================================================
 -- TABLE 생성
@@ -613,18 +615,29 @@ CREATE TABLE `CAL_MST`
     `REG_ID`     VARCHAR(20) NOT NULL COMMENT '등록계정 아이디',
     `MOD_DTM`    VARCHAR(14) DEFAULT NULL COMMENT '수정일시',
     `MOD_ID`     VARCHAR(20) DEFAULT NULL COMMENT '수정계정 아이디',
-    PRIMARY KEY (`CAL_ID`)
+    PRIMARY KEY (`CAL_ID`, `SCHED_DATE`)
 )
-    COMMENT = '캘린더 마스터';
+    PARTITION BY RANGE COLUMNS (`SCHED_DATE`) (
+        PARTITION P_UNDER_2000 VALUES LESS THAN ('20001231'),
+        PARTITION P_UNDER_2025 VALUES LESS THAN ('20251231'),
+        PARTITION P_UNDER_2050 VALUES LESS THAN ('20501231'),
+        PARTITION P_UNDER_2075 VALUES LESS THAN ('20751231'),
+        PARTITION P_UNDER_2100 VALUES LESS THAN ('21001231'),
+        PARTITION P_UNDER_2250 VALUES LESS THAN ('22501231'),
+        PARTITION P_UNDER_2500 VALUES LESS THAN ('25001231'),
+        PARTITION P_UNDER_2750 VALUES LESS THAN ('27501231'),
+        PARTITION P_UNDER_MAXVALUE VALUES LESS THAN (MAXVALUE)
+        );
+
 
 -- ======================
 -- 캘린더 관계
 -- ======================
 CREATE TABLE `CAL_REL`
 (
-    `CAL_ID`   BIGINT                                                        NOT NULL COMMENT '캘린더 아이디',
-    `CAL_TYPE` ENUM ('SCH_MST', 'SCH_HIST', 'SCH_FIX', 'OFF_DAY', 'HOL_DAY') NOT NULL COMMENT '캘린더 타입',
-    `TAR_ID`   BIGINT                                                        NOT NULL COMMENT '대상 아이디',
+    `CAL_ID`   BIGINT                                                                   NOT NULL COMMENT '캘린더 아이디',
+    `CAL_TYPE` ENUM ('SCH_MST', 'SCH_HIST', 'SCH_FIX', 'OFF_DAY', 'HOL_DAY', 'CEN_OFF') NOT NULL COMMENT '캘린더 타입',
+    `TAR_ID`   BIGINT                                                                   NOT NULL COMMENT '대상 아이디',
     PRIMARY KEY (`CAL_ID`, `CAL_TYPE`, `TAR_ID`)
 )
     COMMENT = '캘린더 관계';
@@ -795,30 +808,102 @@ DELIMITER ;
 -- ======================
 CREATE VIEW CLS_VIEW AS
 SELECT T1.CLS_PKG_ID
-	 , T2.CLS_PASS_ID                
+     , T2.CLS_PASS_ID
      , T2.MST_ID                     AS USER_ID
      , F_GET_USER_NM(T2.MST_ID, 'M') AS USER_NM
+     , (SELECT ACCT_ID
+        FROM CUS_REG
+        WHERE MST_ID = T2.MST_ID)    AS ACCT_ID
      , T1.CLS_PKG_NM
      , T1.CLS_TYPE
      , T1.PRICE
      , T2.PAID_AMT
      , T1.DISCOUNT_AMT
-     , T2.DISCOUNT_AMT 				 AS DISCOUNT_AMT2
+     , T2.DISCOUNT_AMT               AS DISCOUNT_AMT2
      , T2.TOTAL_CNT
      , T2.REMAIN_CNT
      , T1.EXP_RATE
      , T2.PAY_METHOD
      , T2.PAY_DATE
      , T2.REFUND_YN
+     , T2.REFUND_DTM
      , T1.USE_YN
 FROM CLS_PKG T1
-JOIN CLS_PASS T2
-  ON T1.CLS_PKG_ID = T2.CLS_PKG_ID
+         JOIN CLS_PASS T2
+              ON T1.CLS_PKG_ID = T2.CLS_PKG_ID
+;
+
+-- ======================
+-- 공휴일 확인용 뷰
+-- ======================
+CREATE VIEW CAL_HOLI_VIEW AS
+SELECT T1.CAL_ID
+     , T1.YEAR
+     , T1.MONTH
+     , T1.DAY
+     , T1.KOR_DATE
+     , T1.SCHED_DATE
+     , T1.SCHED_TIME
+     , T1.REG_DTM
+     , T1.REG_ID
+     , T1.MOD_DTM
+     , T1.MOD_ID
+     , T2.CAL_TYPE
+     , T3.HOLI_NM
+FROM CAL_MST T1
+         JOIN CAL_REL T2
+              ON T1.CAL_ID = T2.CAL_ID
+         JOIN HOLIDAY_MST T3
+              ON T3.HOLI_ID = T2.TAR_ID
+ORDER BY SCHED_DATE, SCHED_TIME
+;
+
+-- ======================
+-- 공휴일 확인용 뷰
+-- ======================
+CREATE VIEW CAL_SCH_VIEW AS
+SELECT T1.SCHED_ID
+     , T1.ACCT_ID
+     , T1.MST_ID
+     , T1.TRAINER_NM
+     , T1.CUS_NM
+     , T1.CLS_STATUS
+     , T1.CLS_SESSION
+     , T1.INJURY
+     , T1.HOMEWORK
+     , T1.VIDEO_REC_YN
+     , T1.REST_YN
+     , T1.FX_YN
+     , T1.CLS_NOTE
+     , T1.CLS_NOTE_YN
+     , T1.REG_DTM
+     , T1.REG_ID
+     , T1.MOD_DTM
+     , T1.MOD_ID
+     , T2.CAL_ID
+     , T2.CAL_TYPE
+     , T3.YEAR
+     , T3.MONTH
+     , T3.DAY
+     , T3.KOR_DATE
+     , T3.SCHED_DATE
+     , T3.SCHED_TIME
+     , CASE
+           WHEN IFNULL((SELECT CAL_ID FROM CAL_REL WHERE CAL_ID = T2.CAL_ID AND CAL_TYPE = 'OFF_DAY'), 0) > 0 THEN 'Y'
+           ELSE 'N' END AS CENTER_OFF_YN
+     , CASE
+           WHEN IFNULL((SELECT CAL_ID FROM CAL_REL WHERE CAL_ID = T2.CAL_ID AND CAL_TYPE = 'HOL_DAY'), 0) > 0 THEN 'Y'
+           ELSE 'N' END AS HOL_YN
+FROM SCHED_MST T1
+         JOIN CAL_REL T2
+              ON T2.TAR_ID = T1.SCHED_ID
+         JOIN CAL_MST T3
+              ON T2.CAL_ID = T3.CAL_ID
+WHERE CAL_TYPE = 'SCH_MST'
+ORDER BY SCHED_DATE, SCHED_TIME
 ;
 
 
-SELECT *
-FROM ACCT;
 
 INSERT INTO ROLES
 VALUES ('01', 'ADMIN', '관리자', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
@@ -873,6 +958,9 @@ VALUES (6, 'GENDER', '성별구분', '성별을 구분하기 위한 코드', 'Y'
 INSERT INTO CODE_MST
 VALUES (7, 'CLS_TYPE', '상품타입', '상품 종류를 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_MST
+VALUES (8, 'CAL_TYPE', '캘린더 타입', '캘린더의 날짜별 특징을 구분하기 위한 코드', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 
 INSERT INTO CODE_DTL
 VALUES (1, 1, 'PAY_DIV', 'PAY', '결제', '정상적으로 결제가 진행 된 상태', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
@@ -924,7 +1012,7 @@ VALUES ('14', '06', 'GENDER', 'M', '남자', '성별 중 남성', 'Y', DATE_FORM
 INSERT INTO CODE_DTL
 VALUES ('15', '06', 'GENDER', 'W', '여자', '성별 중 여성', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
-        
+
 INSERT INTO CODE_DTL
 VALUES ('16', '07', 'CLS_TYPE', 'IOI', '1:1 수업', '수강생과 강사가 1 : 1인 수업', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
@@ -932,6 +1020,25 @@ INSERT INTO CODE_DTL
 VALUES ('17', '07', 'CLS_TYPE', 'TIO', '2:1 수업', '수강생과 강사가 2 : 1인 수업', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
         DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 
+INSERT INTO CODE_DTL
+VALUES ('18', '08', 'CAL_TYPE', 'SCH_MST', '스케쥴 마스터', 'SCHED_MST 테이블에 기록된 일정', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_DTL
+VALUES ('19', '08', 'CAL_TYPE', 'SCH_HIST', '스케쥴 히스토리', 'SCHED_HIST 테이블에 기록된 일정', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'),
+        'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_DTL
+VALUES ('20', '08', 'CAL_TYPE', 'SCH_FIX', '고정 스케쥴', 'SCHED_FX 테이블에 기록된 일정', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_DTL
+VALUES ('21', '08', 'CAL_TYPE', 'OFF_DAY', '강사 휴무일', '해당 일자에 강사가 휴가인 경우', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_DTL
+VALUES ('22', '08', 'CAL_TYPE', 'HOL_DAY', '공휴일', '해당 일자가 법정 공휴일인 경우', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+INSERT INTO CODE_DTL
+VALUES ('23', '08', 'CAL_TYPE', 'CEN_OFF', '센터 휴무일', '해당 일자가 센터 휴무일인 경우', 'Y', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS',
+        DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
 
 COMMIT
 
