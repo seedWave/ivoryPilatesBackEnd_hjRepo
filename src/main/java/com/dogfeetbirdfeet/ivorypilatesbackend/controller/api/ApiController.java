@@ -1,5 +1,8 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.controller.api;
 
+import java.time.Year;
+import java.time.ZoneId;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +29,21 @@ public class ApiController {
 	 */
 	@GetMapping("/holiday")
 	public void getHoliday() {
-		apiService.getHolidayExplorer("2025", "10");
+		String thisYear = Year.now(ZoneId.of("Asia/Seoul")).toString();
+		String nextYear = Year.now(ZoneId.of("Asia/Seoul")).plusYears(1).toString();
+		String twoYear = Year.now(ZoneId.of("Asia/Seoul")).plusYears(2).toString();
+
+		for (int i = 1; i <= 12; i++) {
+			apiService.getHolidayExplorer(thisYear, i < 10 ? "0" + i : i + "");
+		}
+
+		for (int i = 1; i <= 12; i++) {
+			apiService.getHolidayExplorer(nextYear, i < 10 ? "0" + i : i + "");
+		}
+
+		for (int i = 1; i <= 12; i++) {
+			apiService.getHolidayExplorer(twoYear, i < 10 ? "0" + i : i + "");
+		}
 	}
 
 	/**

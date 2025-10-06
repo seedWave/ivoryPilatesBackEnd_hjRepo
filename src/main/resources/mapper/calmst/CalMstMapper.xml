@@ -11,7 +11,7 @@
         WHERE SCHED_DATE = #{schedDate}
     </select>
 
-    <insert id="makeCalmst">
+    <insert id="makeCalMst">
       <![CDATA[
         INSERT
         /*+

@@ -6,9 +6,36 @@
 <mapper namespace="com.dogfeetbirdfeet.ivorypilatesbackend.mapper.test.TestMapper">
 
     <select id="findAnythingByTableName"
-            parameterType="string"
             resultType="map">
         SELECT *
         FROM ${tableName}   <!-- 식별자 치환: 주의! 반드시 검증/화이트리스트 -->
+        <where>
+            <if test="dto.payDateFrom != null and dto.payDateFrom != ''
+                  and dto.payDateTo != null and dto.payDateTo != ''">
+                AND PAY_DATE BETWEEN #{dto.payDateFrom} AND #{dto.payDateTo}
+            </if>
+            <if test="dto.refundDateFrom != null and dto.refundDateFrom != ''
+                  and dto.refundDateTo != null and dto.refundDateTo != ''">
+                AND REFUND_DTM BETWEEN #{dto.refundDateFrom} AND #{dto.refundDateTo}
+            </if>
+            <if test="dto.userId != null and dto.userId != ''">
+                AND USER_ID = #{dto.userId}
+            </if>
+            <if test="dto.acctId != null and dto.acctId != ''">
+                AND ACCT_ID = #{dto.acctId}
+            </if>
+            <if test="dto.useYn != null and dto.useYn != ''">
+                AND USE_YN = #{dto.useYn}
+            </if>
+            <if test="dto.refundYn != null and dto.refundYn != ''">
+                AND REFUND_YN = #{dto.refundYn}
+            </if>
+            <if test="dto.payMethod != null and dto.payMethod != ''">
+                AND PAY_METHOD = #{dto.payMethod}
+            </if>
+            <if test="dto.schDate != null and dto.schDate != ''">
+                AND SCHED_DATE = #{dto.schDate}
+            </if>
+        </where>
     </select>
 </mapper>

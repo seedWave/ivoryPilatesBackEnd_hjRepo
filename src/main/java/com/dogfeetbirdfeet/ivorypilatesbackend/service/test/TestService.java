@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import org.springframework.stereotype.Service;
 
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.searchdto.TestSearchDto;
 import com.dogfeetbirdfeet.ivorypilatesbackend.mapper.test.TestMapper;
 
 /**
@@ -20,9 +21,17 @@ public class TestService {
 		this.testMapper = testMapper;
 	}
 
-	public List<?> getTableInfo(String tableName) {
+	public List<?> getTableInfo(String tableName, TestSearchDto dto) {
 
-		return testMapper.findAnythingByTableName(returnCamelCaseByTableName(tableName));
+		if (null != tableName && tableName.equals("clsView")) {
+			dto.setPayDateTo(dto.getPayDateTo().replace("-", ""));
+			dto.setPayDateFrom(dto.getPayDateFrom().replace("-", ""));
+			dto.setRefundDateFrom(dto.getRefundDateFrom().replace("-", ""));
+			dto.setRefundDateTo(dto.getRefundDateTo().replace("-", ""));
+		}
+
+		System.out.println(dto);
+		return testMapper.findAnythingByTableName(returnCamelCaseByTableName(tableName), dto);
 	}
 
 	private String returnCamelCaseByTableName(String input) {
