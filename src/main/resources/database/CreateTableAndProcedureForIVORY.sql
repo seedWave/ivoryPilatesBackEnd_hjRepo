@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS `CUS_CONS`;
 DROP TABLE IF EXISTS `CUS_MST`;
 DROP TABLE IF EXISTS `CLS_PKG`;
 DROP TABLE IF EXISTS `HOLIDAY_MST`;
+DROP TABLE IF EXISTS `CENTER_OFF_MST`;
 DROP TABLE IF EXISTS `CAL_REL`;
 DROP TABLE IF EXISTS `CAL_MST`;
 
@@ -188,6 +189,20 @@ CREATE TABLE `HOLIDAY_MST`
 )
     COMMENT = '공휴일 마스터';
 
+-- ======================
+-- 센터 휴무일 마스터
+-- ======================
+CREATE TABLE `CENTER_OFF_MST`
+(
+    `OFF_ID`  BIGINT      NOT NULL COMMENT '휴무일 아이디' AUTO_INCREMENT,
+    `OFF_NM`  VARCHAR(20) NOT NULL COMMENT '휴무일 이름',
+    `REG_DTM` VARCHAR(14) NOT NULL COMMENT '등록일시',
+    `REG_ID`  VARCHAR(20) NOT NULL COMMENT '등록계정 아이디',
+    `MOD_DTM` VARCHAR(14) DEFAULT NULL COMMENT '수정일시',
+    `MOD_ID`  VARCHAR(20) DEFAULT NULL COMMENT '수정계정 아이디',
+    PRIMARY KEY (`OFF_ID`)
+)
+    COMMENT = '센터 휴무일 마스터';
 
 -- ======================
 -- 휴무일 관리
@@ -859,47 +874,69 @@ ORDER BY SCHED_DATE, SCHED_TIME
 ;
 
 -- ======================
--- 공휴일 확인용 뷰
+-- 스케쥴 확인용 뷰
 -- ======================
 CREATE VIEW CAL_SCH_VIEW AS
-SELECT T1.SCHED_ID
-     , T1.ACCT_ID
-     , T1.MST_ID
-     , T1.TRAINER_NM
-     , T1.CUS_NM
-     , T1.CLS_STATUS
-     , T1.CLS_SESSION
-     , T1.INJURY
-     , T1.HOMEWORK
-     , T1.VIDEO_REC_YN
-     , T1.REST_YN
-     , T1.FX_YN
-     , T1.CLS_NOTE
-     , T1.CLS_NOTE_YN
-     , T1.REG_DTM
-     , T1.REG_ID
-     , T1.MOD_DTM
-     , T1.MOD_ID
+SELECT T4.SCHED_ID
+     , T4.ACCT_ID
+     , T4.MST_ID
+     , T4.TRAINER_NM
+     , T4.CUS_NM
+     , IF(R.ACCT_OFF = 1, 'Y', 'N')                                                               AS ACCT_OFF_YN
+     , IF(R.HOL = 1, 'Y', 'N')                                                                    AS HOL_YN
+     , IF(R.CEN_OFF = 1, 'Y', 'N')                                                                AS CENTER_OFF_YN
+     , IF(R.ACCT_OFF = 1, (SELECT CONCAT(NAME, ", ") FROM ACCT WHERE ACCT_ID = T4.ACCT_ID), NULL) AS OFF_ACCT_NM
+     , P.GRP_YN
+     , IF(P.GRP_YN = 'Y', P.GRP_IDS, NULL)                                                        AS GRP_IDS
+     , IF(P.GRP_YN = 'Y', P.GRP_NMS, NULL)                                                        AS GRP_NMS
+     , T4.CLS_STATUS
+     , T4.CLS_SESSION
+     , T4.INJURY
+     , T4.HOMEWORK
+     , T4.VIDEO_REC_YN
+     , T4.REST_YN
+     , T4.FX_YN
+     , T4.CLS_NOTE
+     , T4.CLS_NOTE_YN
+     , T4.REG_DTM
+     , T4.REG_ID
+     , T4.MOD_DTM
+     , T4.MOD_ID
      , T2.CAL_ID
      , T2.CAL_TYPE
-     , T3.YEAR
-     , T3.MONTH
-     , T3.DAY
-     , T3.KOR_DATE
-     , T3.SCHED_DATE
-     , T3.SCHED_TIME
-     , CASE
-           WHEN IFNULL((SELECT CAL_ID FROM CAL_REL WHERE CAL_ID = T2.CAL_ID AND CAL_TYPE = 'OFF_DAY'), 0) > 0 THEN 'Y'
-           ELSE 'N' END AS CENTER_OFF_YN
-     , CASE
-           WHEN IFNULL((SELECT CAL_ID FROM CAL_REL WHERE CAL_ID = T2.CAL_ID AND CAL_TYPE = 'HOL_DAY'), 0) > 0 THEN 'Y'
-           ELSE 'N' END AS HOL_YN
-FROM SCHED_MST T1
-         JOIN CAL_REL T2
-              ON T2.TAR_ID = T1.SCHED_ID
-         JOIN CAL_MST T3
-              ON T2.CAL_ID = T3.CAL_ID
-WHERE CAL_TYPE = 'SCH_MST'
+     , T1.YEAR
+     , T1.MONTH
+     , T1.DAY
+     , T1.KOR_DATE
+     , T1.SCHED_DATE
+     , T1.SCHED_TIME
+FROM CAL_MST T1
+         LEFT JOIN CAL_REL T2
+                   ON T2.CAL_ID = T1.CAL_ID
+         LEFT JOIN SCHED_MST T4
+                   ON T2.TAR_ID = T4.SCHED_ID
+         LEFT JOIN (SELECT CAL_ID
+                         , MAX(CAL_TYPE = 'OFF_DAY') AS ACCT_OFF
+                         , MAX(CAL_TYPE = 'HOL_DAY') AS HOL
+                         , MAX(CAL_TYPE = 'CEN_OFF') AS CEN_OFF
+                    FROM CAL_REL
+                    GROUP BY CAL_ID) R
+                   ON R.CAL_ID = T1.CAL_ID
+         LEFT JOIN (SELECT P2.MST_ID
+                         , P2.STA_DTM
+                         , P2.END_DTM
+                         , CASE WHEN P1.CLS_TYPE = 'IOI' THEN 'N' ELSE 'Y' END                               GRP_YN
+                         , P2.GRP_CUS_ID
+                         , CONCAT(F_GET_USER_NM(P3.CUS_ID_1, 'C'), ", ", F_GET_USER_NM(P3.CUS_ID_2, 'C')) AS GRP_NMS
+                         , CONCAT(P3.CUS_ID_1, ", ", P3.CUS_ID_2)                                         AS GRP_IDS
+                    FROM CLS_PKG P1
+                             JOIN CLS_PASS P2
+                                  ON P1.CLS_PKG_ID = P2.CLS_PKG_ID
+                             JOIN CUS_GRP P3
+                                  ON P3.GRP_CUS_ID = P2.GRP_CUS_ID
+                    ORDER BY P2.STA_DTM) P
+                   ON P.MST_ID = T4.MST_ID
+                       AND T1.SCHED_DATE BETWEEN P.STA_DTM AND P.END_DTM
 ORDER BY SCHED_DATE, SCHED_TIME
 ;
 
