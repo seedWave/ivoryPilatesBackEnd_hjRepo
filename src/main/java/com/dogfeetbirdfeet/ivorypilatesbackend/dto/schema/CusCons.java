@@ -10,7 +10,7 @@ import lombok.Data;
 public class CusCons {
 
 	private String cusId;
-	private String mstId;
+	private Long mstId;
 	private Float height;
 	private Float weight;
 	private String disease;

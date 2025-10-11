@@ -14,7 +14,7 @@ public class ClsPass {
 
 	private Long clsPassId;
 	private Long clsPkgId;
-	private String mstId;
+	private Long mstId;
 	private String grpCusId;
 	private Integer discountAmt;
 	private Integer paidAmt;

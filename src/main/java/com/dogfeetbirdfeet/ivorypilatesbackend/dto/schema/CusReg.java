@@ -12,10 +12,10 @@ import lombok.Data;
 public class CusReg {
 
 	private String custId;
-	private String mstId;
-	private String acctId;
+	private Long mstId;
+	private Long acctId;
 	private Long grpCusId;
-	private Long clsPassId;
+	private Long clsPkgId;
 	private Float height;
 	private Float weight;
 	private String disease;

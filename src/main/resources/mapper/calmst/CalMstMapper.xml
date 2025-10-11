@@ -11,7 +11,7 @@
         WHERE SCHED_DATE = #{schedDate}
     </select>
 
-    <insert id="makeCalmst">
+    <insert id="makeCalMst">
       <![CDATA[
         INSERT
         /*+
@@ -66,7 +66,7 @@
                 SELECT t.N * 10 + u.N AS H
                 FROM DIGITS t
                          CROSS JOIN DIGITS u
-                WHERE t.N * 10 + u.N <= 23),
+                WHERE t.N * 10 + u.N BETWEEN 9 AND 23),
             CAL AS (SELECT DATE_ADD(BASE.D, INTERVAL NUMS.N DAY)          AS NUM_DATE
                          , LPAD(HOURS.H, 2, '0')                          AS HOUR_24
                          , DAYNAME(DATE_ADD(BASE.D, INTERVAL NUMS.N DAY)) AS ENG_DATE

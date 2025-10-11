@@ -58,7 +58,7 @@ public class ApiService {
 	@Transactional(rollbackFor = Exception.class)
 	public void makeCalender(String staYmd) {
 
-		// 20000101 ~ 99991231까지 25년 단위로 반복한다.
+		// 20000101 ~ 29991231까지 25년 단위로 반복한다.
 
 		DateTimeFormatter formatter = DateTimeFormatter.BASIC_ISO_DATE; // yyyyMMdd
 

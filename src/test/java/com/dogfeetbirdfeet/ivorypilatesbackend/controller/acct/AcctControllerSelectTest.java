@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Unit test for {@link AcctController}.
  * <p>
  *     This test verifies that an acct is correctly selected through
- *        {@link AcctController#getAcctById(String)}
+ *        {@link AcctController#getAcctById(Long)}
  * 	using a mocked {@link com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper}
  * </p>
  */
@@ -53,7 +53,7 @@ public class AcctControllerSelectTest {
 
 		// ✅ Given
 		Acct acctDto = new Acct();
-		acctDto.setAcctId("A000001");
+		acctDto.setAcctId(1L);
 		acctDto.setAcctPw("PWD");
 		acctDto.setName("관리자01");
 		acctDto.setContact("010-2592-3017");
@@ -68,7 +68,7 @@ public class AcctControllerSelectTest {
 		String expectedJson = objectMapper.writeValueAsString(acctDto);
 
 		// ✅ When
-		when(acctService.getAcctById("A000001")).thenReturn(acctDto);
+		when(acctService.getAcctById(1L)).thenReturn(acctDto);
 
 		// ✅ Then
 		mockMvc.perform(get("/acct/getAcctById")
@@ -100,16 +100,16 @@ public class AcctControllerSelectTest {
 
 		// ✅ Given
 		Acct acctDto = new Acct();
-		acctDto.setAcctId("B000001");
+		acctDto.setAcctId(555L);
 
 		// ✅ When
-		when(acctService.getAcctById("B000001")).thenReturn(null);
+		when(acctService.getAcctById(555L)).thenReturn(null);
 
 		// ✅ Then
 		mockMvc.perform(get("/acct/getAcctById")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(acctDto))
-			.param("acctId", "B000001"))
+			.param("acctId", String.valueOf(555L)))
 			.andExpect(status().isOk())
 			.andDo(document("acct-get-by-id",
 				queryParameters(

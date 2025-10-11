@@ -12,7 +12,7 @@ import lombok.Data;
 public class OffDayMst {
 
 	private Long offId;
-	private String acctId;
+	private Long acctId;
 	private String trainerNm;
 	private YN restYn;
 	private String regDtm;

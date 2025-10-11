@@ -25,7 +25,7 @@ public interface AcctMapper {
 	 * @param acctId 대상 ID
 	 * @return 계정
 	 */
-	Acct getAcctById(@Param("acctId") String acctId);
+	Acct getAcctById(@Param("acctId") Long acctId);
 
 	int insertAcct(@Param("acct") Acct acct, @Param("userId") String userId);
 }

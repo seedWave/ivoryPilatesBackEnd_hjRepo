@@ -12,8 +12,8 @@ import lombok.Data;
 public class CusWdr {
 
 	private String custId;
-	private String mstId;
-	private String acctId;
+	private Long mstId;
+	private Long acctId;
 	private Long grpCusId;
 	private Long clsPassId;
 	private Float height;

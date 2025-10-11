@@ -33,7 +33,7 @@ public class AcctService {
 	 * @param acctId 대상 계정 아이디
 	 * @return 계정 정보
 	 */
-	public Acct getAcctById(@Param("acctId") String acctId) {
+	public Acct getAcctById(@Param("acctId") Long acctId) {
 
 		return postProcessingAcctTable(acctMapper.getAcctById(acctId));
 	}

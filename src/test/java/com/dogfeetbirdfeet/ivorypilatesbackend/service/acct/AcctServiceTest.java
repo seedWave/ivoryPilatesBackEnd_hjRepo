@@ -19,7 +19,7 @@ import com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper;
  * Unit test for {#{@link AcctService}}
  * <p>
  *     This test verifies that an acct is correctly selected through
- *        {@link AcctService#getAcctById(String)}
+ *        {@link AcctService#getAcctById(Long)}
  * 	using a mocked {#{@link com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper}}
  * </p>
  */
@@ -35,7 +35,7 @@ public class AcctServiceTest {
 
 		// ✅ Arrange
 		Acct acctDto = new Acct();
-		acctDto.setAcctId("A000001");
+		acctDto.setAcctId(1L);
 		acctDto.setAcctPw("PWD");
 		acctDto.setName("관리자01");
 		acctDto.setContact("010-2592-3017");
@@ -58,7 +58,7 @@ public class AcctServiceTest {
 
 		// ✅ Assert
 		assertNotNull(result);
-		assertEquals("A000001", result.getAcctId());
+		assertEquals(1L, result.getAcctId());
 		assertEquals("PWD", result.getAcctPw());
 		assertEquals("관리자01", result.getName());
 		assertEquals("010-2592-3017", result.getContact());
@@ -90,14 +90,14 @@ public class AcctServiceTest {
 	@DisplayName("Service: getAcctById - 실패(null)")
 	void testGetAcctById_Fail_Null() {
 		AcctMapper mockMapper = mock(AcctMapper.class);
-		when(mockMapper.getAcctById("B000001")).thenReturn(null);
+		when(mockMapper.getAcctById(1L)).thenReturn(null);
 
 		AcctService acctService = new AcctService(mockMapper);
 
-		Acct result = acctService.getAcctById("B000001");
+		Acct result = acctService.getAcctById(1L);
 
 		assertNull(result);
-		verify(mockMapper, times(1)).getAcctById("B000001");
+		verify(mockMapper, times(1)).getAcctById(1L);
 
 		var w = writer();
 		// 실패 케이스는 보통 빈 JSON 예시 or 설명만
