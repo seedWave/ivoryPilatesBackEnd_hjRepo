@@ -884,6 +884,7 @@ SELECT T4.SCHED_ID
      , T4.CUS_NM
      , IF(R.ACCT_OFF = 1, 'Y', 'N')                                                               AS ACCT_OFF_YN
      , IF(R.HOL = 1, 'Y', 'N')                                                                    AS HOL_YN
+     , IF(R.HOL = 1, (SELECT HOLI_NM FROM HOLIDAY_MST WHERE HOLI_ID = T2.TAR_ID), '')             AS HOL_NM
      , IF(R.CEN_OFF = 1, 'Y', 'N')                                                                AS CENTER_OFF_YN
      , IF(R.ACCT_OFF = 1, (SELECT CONCAT(NAME, ", ") FROM ACCT WHERE ACCT_ID = T4.ACCT_ID), NULL) AS OFF_ACCT_NM
      , P.GRP_YN
@@ -925,7 +926,7 @@ FROM CAL_MST T1
          LEFT JOIN (SELECT P2.MST_ID
                          , P2.STA_DTM
                          , P2.END_DTM
-                         , CASE WHEN P1.CLS_TYPE = 'IOI' THEN 'N' ELSE 'Y' END                               GRP_YN
+                         , IF(P1.CLS_TYPE = 'IOI', 'N', 'Y')                                                 GRP_YN
                          , P2.GRP_CUS_ID
                          , CONCAT(F_GET_USER_NM(P3.CUS_ID_1, 'C'), ", ", F_GET_USER_NM(P3.CUS_ID_2, 'C')) AS GRP_NMS
                          , CONCAT(P3.CUS_ID_1, ", ", P3.CUS_ID_2)                                         AS GRP_IDS
