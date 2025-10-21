@@ -36,6 +36,16 @@
             <if test="dto.schDate != null and dto.schDate != ''">
                 AND SCHED_DATE = #{dto.schDate}
             </if>
+            <if test="dto.staDate != null and dto.staDate != ''
+                    and dto.endDate != null and dto.endDate != ''">
+                AND SCHED_DATE BETWEEN #{dto.staDate} AND #{dto.endDate}
+            </if>
+            <if test="dto.schMonth != null and dto.schMonth != ''">
+                AND SUBSTR(SCHED_DATE, 1, 6) = #{dto.schMonth}
+            </if>
+            <if test="dto.searchUserNm != null and dto.searchUserNm != ''">
+                AND CUS_NM = #{dto.searchUserNm}
+            </if>
         </where>
     </select>
 </mapper>

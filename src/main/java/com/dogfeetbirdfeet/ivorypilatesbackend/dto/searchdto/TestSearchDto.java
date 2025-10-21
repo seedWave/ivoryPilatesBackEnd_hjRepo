@@ -15,4 +15,8 @@ public class TestSearchDto {
 	private String refundDateFrom;
 	private String refundDateTo;
 	private String schDate;
+	private String staDate;
+	private String endDate;
+	private String schMonth;
+	private String searchUserNm;
 }
