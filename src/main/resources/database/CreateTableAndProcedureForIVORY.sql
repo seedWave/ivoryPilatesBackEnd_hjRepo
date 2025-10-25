@@ -833,12 +833,10 @@ BEGIN
         DO
 
             -- 17, 18, 19 중 하나
-            SELECT FLOOR(RAND() * 3) + 17
-            INTO CLS_PKG_ID;
+            SET CLS_PKG_ID = FLOOR(RAND() * 3) + 17;
 
             -- 0, 1000, 2000, ...., 30000
-            SELECT FLOOR(RAND() * 31) * 1000
-            INTO DISCOUNT_AMT;
+            SET DISCOUNT_AMT = FLOOR(RAND() * 31) * 1000;
 
             -- 최종 가격 (원 가격 - 할인 가격)
             SET V_PAID_AMT =
@@ -860,11 +858,9 @@ BEGIN
             FROM (SELECT FLOOR(RAND() * 60) AS r) t;
 
             -- 0 ~ 10
-            SELECT FLOOR(RAND() * 11)
-            INTO REMAIN_CNT;
+            SET REMAIN_CNT = FLOOR(RAND() * 11);
 
-            SELECT FLOOR(RAND() * 100) + 1
-            INTO MST_ID;
+            SET MST_ID = FLOOR(RAND() * 100) + 1;
 
             INSERT INTO CLS_PASS
             (CLS_PKG_ID, MST_ID, GRP_CUS_ID, DISCOUNT_AMT, PAID_AMT, PAY_DATE, TOTAL_CNT, INST_MM, PAY_METHOD,
@@ -874,6 +870,7 @@ BEGIN
                     (CASE CLS_PKG_ID WHEN 17 THEN 10 WHEN 18 THEN 20 WHEN 19 THEN 30 END), 0, 'CASH',
                     REMAIN_CNT, V_YMD, V_YMD, (IF(REMAIN_CNT > 0, 'Y', 'N')), 'N', 0, NULL, '자동생성 수강권 001', V_YMD,
                     'admin', V_YMD, 'admin');
+            SET i = i + 1;
         END WHILE;
 
 END$$
