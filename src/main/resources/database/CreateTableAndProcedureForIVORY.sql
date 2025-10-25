@@ -34,6 +34,8 @@ DROP FUNCTION IF EXISTS F_GET_USER_NM;
 
 DROP EVENT IF EXISTS EV_UPDATE_CUS_REST;
 
+DROP PROCEDURE IF EXISTS F_MAKE_CLS_PASS;
+
 DROP VIEW IF EXISTS `CLS_VIEW`;
 DROP VIEW IF EXISTS `CAL_HOLI_VIEW`;
 DROP VIEW IF EXISTS `CAL_SCH_VIEW`;
@@ -163,7 +165,7 @@ CREATE TABLE `CLS_PKG`
     `INST_YN`      ENUM ('Y','N')      NOT NULL DEFAULT 'N' COMMENT '할부여부',
     `INST_MM`      INT                          DEFAULT NULL COMMENT '할부가능개월',
     `USE_YN`       ENUM ('Y','N')      NOT NULL DEFAULT 'Y' COMMENT '사용여부',
-    `EXP_RATE`     VARCHAR(14)                  DEFAULT NULL COMMENT '유효기간',
+    `EXP_RATE`     INT                          DEFAULT NULL COMMENT '유효기간',
     `REMARK`       VARCHAR(4000)                DEFAULT NULL COMMENT '메모',
     `REG_DTM`      VARCHAR(14)         NOT NULL COMMENT '등록일시',
     `REG_ID`       VARCHAR(20)         NOT NULL COMMENT '등록계정 아이디',
@@ -812,6 +814,67 @@ BEGIN
     INSERT INTO `ACCT_ROLE`
         (`ACCT_ID`, `ROLE_ID`, `REG_DTM`, `REG_ID`)
     VALUES (NEW.`ACCT_ID`, '01', DATE_FORMAT(NOW(), '%Y%m%d'), 'SYS');
+
+END$$
+
+CREATE
+    DEFINER = `ivory_admin` PROCEDURE `IVORY`.`F_MAKE_CLS_PASS`()
+BEGIN
+
+    DECLARE i INT DEFAULT 1;
+    DECLARE CLS_PKG_ID INT;
+    DECLARE DISCOUNT_AMT INT;
+    DECLARE V_PAID_AMT INT;
+    DECLARE V_YMD VARCHAR(20);
+    DECLARE REMAIN_CNT INT;
+    DECLARE MST_ID INT;
+
+    WHILE (i <= 1000)
+        DO
+
+            -- 17, 18, 19 중 하나
+            SELECT FLOOR(RAND() * 3) + 17
+            INTO CLS_PKG_ID;
+
+            -- 0, 1000, 2000, ...., 30000
+            SELECT FLOOR(RAND() * 31) * 1000
+            INTO DISCOUNT_AMT;
+
+            -- 최종 가격 (원 가격 - 할인 가격)
+            SET V_PAID_AMT =
+                    (CASE CLS_PKG_ID
+                         WHEN 17 THEN 700000
+                         WHEN 18 THEN 1260000
+                         WHEN 19 THEN 1575000
+                        END) - DISCOUNT_AMT;
+
+            -- 두 달 범위에서 날짜 뽑기 (20251001~20251030, 20251101~20251130)
+            SELECT DATE_FORMAT(
+                           CASE
+                               WHEN r < 30
+                                   THEN DATE_ADD('2025-10-01', INTERVAL r DAY)
+                               ELSE DATE_ADD('2025-11-01', INTERVAL r - 30 DAY)
+                               END
+                       , '%Y%m%d')
+            INTO V_YMD
+            FROM (SELECT FLOOR(RAND() * 60) AS r) t;
+
+            -- 0 ~ 10
+            SELECT FLOOR(RAND() * 11)
+            INTO REMAIN_CNT;
+
+            SELECT FLOOR(RAND() * 100) + 1
+            INTO MST_ID;
+
+            INSERT INTO CLS_PASS
+            (CLS_PKG_ID, MST_ID, GRP_CUS_ID, DISCOUNT_AMT, PAID_AMT, PAY_DATE, TOTAL_CNT, INST_MM, PAY_METHOD,
+             REMAIN_CNT, STA_DTM, END_DTM, FIN_YN, REFUND_YN, REFUND_AMT, REFUND_DTM, REMARK, REG_DTM, REG_ID, MOD_DTM,
+             MOD_ID)
+            VALUES (CLS_PKG_ID, MST_ID, NULL, DISCOUNT_AMT, V_PAID_AMT, V_YMD,
+                    (CASE CLS_PKG_ID WHEN 17 THEN 10 WHEN 18 THEN 20 WHEN 19 THEN 30 END), 0, 'CASH',
+                    REMAIN_CNT, V_YMD, V_YMD, (IF(REMAIN_CNT > 0, 'Y', 'N')), 'N', 0, NULL, '자동생성 수강권 001', V_YMD,
+                    'admin', V_YMD, 'admin');
+        END WHILE;
 
 END$$
 
