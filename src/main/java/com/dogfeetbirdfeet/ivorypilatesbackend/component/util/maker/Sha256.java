@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author nks
  * @apiNote SHA_256 암호화
  */
-public class Sha256 {
+public class SHA_256 {
 
 	@Value("${salt}")
 	private static String salt;
@@ -37,9 +37,8 @@ public class Sha256 {
 
 		StringBuilder builder = new StringBuilder();
 
-		for (byte b : bytes) {
+		for (byte b : bytes)
 			builder.append(String.format("%02x", b));
-		}
 
 		return builder.toString();
 	}

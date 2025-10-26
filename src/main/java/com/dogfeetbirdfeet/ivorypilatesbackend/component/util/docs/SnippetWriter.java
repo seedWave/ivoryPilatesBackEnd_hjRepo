@@ -2,9 +2,7 @@ package com.dogfeetbirdfeet.ivorypilatesbackend.component.util.docs;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -26,9 +24,9 @@ public class SnippetWriter {
 
 	public void writeJson(String relative, Object obj) {
 		try {
-			Path path = ensurePath(relative);
+			Path p = ensurePath(relative);
 			String json = om.writeValueAsString(obj);
-			Files.writeString(path, json, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
+			Files.writeString(p, json, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
 				StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -37,8 +35,8 @@ public class SnippetWriter {
 
 	public void writeAdoc(String relative, String content) {
 		try {
-			Path path = ensurePath(relative);
-			Files.writeString(path, content, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
+			Path p = ensurePath(relative);
+			Files.writeString(p, content, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
 				StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -50,8 +48,8 @@ public class SnippetWriter {
 	}
 
 	private Path ensurePath(String relative) throws IOException {
-		Path path = snippetsDir.resolve(relative);
-		Files.createDirectories(path.getParent());
-		return path;
+		Path p = snippetsDir.resolve(relative);
+		Files.createDirectories(p.getParent());
+		return p;
 	}
 }

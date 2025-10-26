@@ -6,9 +6,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonmethod.CommonMethod;
+import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.commonMethod.CommonMethod;
 import com.dogfeetbirdfeet.ivorypilatesbackend.component.util.maker.ServiceResult;
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.ResponseMsg;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.Acct;
 import com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper;
 
@@ -33,7 +33,7 @@ public class AcctService {
 	 * @param acctId 대상 계정 아이디
 	 * @return 계정 정보
 	 */
-	public Acct getAcctById(@Param("acctId") Long acctId) {
+	public Acct getAcctById(@Param("acctId") String acctId) {
 
 		return postProcessingAcctTable(acctMapper.getAcctById(acctId));
 	}
@@ -67,10 +67,8 @@ public class AcctService {
 	 */
 	public Acct postProcessingAcctTable(Acct user) {
 
-		if (null == user) {
+		if (null == user)
 			return null;
-		}
-
 		user.setBirthDate(null != user.getBirthDate() ? commonMethod.translateDate(user.getBirthDate()) : null);
 		user.setRegDtm(null != user.getRegDtm() ? commonMethod.translateDate(user.getRegDtm()) : null);
 		user.setModDtm(null != user.getModDtm() ? commonMethod.translateDate(user.getModDtm()) : null);

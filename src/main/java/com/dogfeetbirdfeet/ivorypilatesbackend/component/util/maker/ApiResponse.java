@@ -2,7 +2,7 @@ package com.dogfeetbirdfeet.ivorypilatesbackend.component.util.maker;
 
 import java.time.Instant;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.ResponseMsg;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.ResponseMsg;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,19 +27,19 @@ public class ApiResponse<T> {
 	private Instant timestamp = Instant.now();
 
 	public static <T> ApiResponse<T> ok(T data) {
-		ApiResponse<T> res = new ApiResponse<>();
-		res.success = true;
-		res.data = data;
-		res.timestamp = Instant.now();
-		return res;
+		ApiResponse<T> r = new ApiResponse<>();
+		r.success = true;
+		r.data = data;
+		r.timestamp = Instant.now();
+		return r;
 	}
 
 	public static <T> ApiResponse<T> error(ResponseMsg responseMsg) {
-		ApiResponse<T> res = new ApiResponse<>();
-		res.success = false;
-		res.error = new ApiError(responseMsg.getKey(), responseMsg.getMsg(), null);
-		res.timestamp = Instant.now();
-		return res;
+		ApiResponse<T> r = new ApiResponse<>();
+		r.success = false;
+		r.error = new ApiError(responseMsg.getKey(), responseMsg.getMsg(), null);
+		r.timestamp = Instant.now();
+		return r;
 	}
 
 	@Getter

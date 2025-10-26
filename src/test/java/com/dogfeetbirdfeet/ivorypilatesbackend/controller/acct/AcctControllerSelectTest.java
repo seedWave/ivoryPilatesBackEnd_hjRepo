@@ -1,7 +1,7 @@
 package com.dogfeetbirdfeet.ivorypilatesbackend.controller.acct;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -18,8 +18,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.Gender;
-import com.dogfeetbirdfeet.ivorypilatesbackend.dto.enums.YN;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.Gender;
+import com.dogfeetbirdfeet.ivorypilatesbackend.dto.Enum.YN;
 import com.dogfeetbirdfeet.ivorypilatesbackend.dto.schema.Acct;
 import com.dogfeetbirdfeet.ivorypilatesbackend.service.acct.AcctService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Unit test for {@link AcctController}.
  * <p>
  *     This test verifies that an acct is correctly selected through
- *        {@link AcctController#getAcctById(Long)}
+ * 		{@link AcctController#getAcctById(String)}
  * 	using a mocked {@link com.dogfeetbirdfeet.ivorypilatesbackend.mapper.acct.AcctMapper}
  * </p>
  */
@@ -53,7 +53,7 @@ public class AcctControllerSelectTest {
 
 		// ✅ Given
 		Acct acctDto = new Acct();
-		acctDto.setAcctId(1L);
+		acctDto.setAcctId("A000001");
 		acctDto.setAcctPw("PWD");
 		acctDto.setName("관리자01");
 		acctDto.setContact("010-2592-3017");
@@ -68,7 +68,7 @@ public class AcctControllerSelectTest {
 		String expectedJson = objectMapper.writeValueAsString(acctDto);
 
 		// ✅ When
-		when(acctService.getAcctById(1L)).thenReturn(acctDto);
+		when(acctService.getAcctById("A000001")).thenReturn(acctDto);
 
 		// ✅ Then
 		mockMvc.perform(get("/acct/getAcctById")
@@ -100,16 +100,16 @@ public class AcctControllerSelectTest {
 
 		// ✅ Given
 		Acct acctDto = new Acct();
-		acctDto.setAcctId(555L);
+		acctDto.setAcctId("B000001");
 
 		// ✅ When
-		when(acctService.getAcctById(555L)).thenReturn(null);
+		when(acctService.getAcctById("B000001")).thenReturn(null);
 
 		// ✅ Then
 		mockMvc.perform(get("/acct/getAcctById")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(acctDto))
-			.param("acctId", String.valueOf(555L)))
+			.param("acctId", "B000001"))
 			.andExpect(status().isOk())
 			.andDo(document("acct-get-by-id",
 				queryParameters(
