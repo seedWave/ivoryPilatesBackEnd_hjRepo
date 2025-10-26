@@ -19,7 +19,7 @@ public class ClsPkg {
 	private YN instYn;
 	private Integer instMm;
 	private YN useYn;
-	private String expRate;
+	private Integer expRate;
 	private String remark;
 	private String regDtm;
 	private String regId;
